@@ -7,8 +7,12 @@
         <me-button v-if="keyword" @click="handleClear" size="small" icon="ep:close"></me-button>
       </div>
       <div class="search-tags">
-        <span class="tag" v-for="item in tags" :key="item">{{ item }}</span>
+        <span class="tag" v-for="item in categories" @click="getVideosInCategory(item.id)" :key="item.id">{{ item.name
+        }}</span>
       </div>
+    </div>
+    <div class="pager">
+      <me-pagination v-model:page="page" :total="total" @change="getList"></me-pagination>
     </div>
     <ol class="video-list">
       <li class="video-card" v-for="item in list" :key="item.id" @click="handlePreview(item)">
@@ -37,7 +41,7 @@
 <script lang="ts" setup>
 import { useAppStore } from '@/stores'
 definePageMeta({
-  layout: 'default'
+  key: 'index',
 })
 const Router = useRouter()
 const appStore = useAppStore()
@@ -46,44 +50,30 @@ const handlePreview = (item: any) => {
   const videoId = item.id
   Router.push('/preview' + '?id=' + videoId)
 }
-const list = ref<any>([])
-const getList = async () => {
-  const params = {
-    id: '7bh0a0p2JM',
-    urls: 'true',
-    page_size: 10
-    // sort_by: 'date'
-  }
-  const data = await getCategoriesVideos(params)
-  list.value = data.hits
-  console.log(data)
-}
-getList()
-//search
-const keyword = ref('')
 const query = ref({
   urls: 'true',
   page_size: 10
 })
-const tags = ref([
-  'Nature',
-  'Travel',
-  'Music',
-  'Sports',
-  'Fashion',
-  'Food',
-  'Animals',
-  'Technology',
-  'Architecture',
-  'People',
-  'Vehicles',
-  'Entertainment',
-  'Business',
-  'Education',
-  'Science',
-  'News',
-  'Religion',
-])
+const page = ref(1)
+const total = ref(0)
+const list = ref<any>([])
+const getList = async () => {
+  console.log('getList')
+  const params = {
+    id: '7bh0a0p2JM',
+    urls: 'true',
+    page_size: 10,
+    page: page.value,
+    // sort_by: 'date'
+  }
+  const data = await getCategoriesVideos(params)
+  console.log(params, data)
+  list.value = data.hits
+  total.value = data.total
+}
+getList()
+//search
+const keyword = ref('')
 const handleClear = () => {
   keyword.value = ''
   getList()
@@ -94,9 +84,26 @@ const handleSearch = async () => {
     query: keyword.value
   }
   const data = await getVideoList(params)
+  console.log(data)
   list.value = data.hits
+  total.value = data.total
 
 }
+//分类
+const categories = ref<any>([])
+const getCategories = async () => {
+  const data = await getCategoriesList()
+  categories.value = data.hits
+}
+const getVideosInCategory = async (id: string) => {
+  const params = {
+    ...query.value,
+    id: id
+  }
+  const data = await getCategoriesVideos(params)
+  list.value = data.hits
+}
+getCategories()
 </script>	
 <style lang="less" scoped>
 .home-page {
@@ -154,7 +161,7 @@ const handleSearch = async () => {
   display: flex;
   width: 100%;
   flex-direction: column;
-  padding: 0 0 80px 0;
+  padding: 0 0 20px 0;
 
   .search-input {
     padding: 12px;
@@ -209,5 +216,12 @@ const handleSearch = async () => {
       }
     }
   }
+}
+
+.pager {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20px 0;
 }
 </style>	

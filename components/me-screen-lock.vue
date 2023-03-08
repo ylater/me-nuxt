@@ -1,25 +1,26 @@
 <template>
-  <div class="me-screen-lock">
-
-    <!-- lock -->
-    <div class="screen-lock" v-if="visiblePin">
-      <me-pin @complete="handlePin"></me-pin>
-      <p class="pin-tip">
-        请输入pin:1234
-        <me-button class="btn" @click="handleVisblePin(false)">取消</me-button>
-      </p>
-    </div>
-
-    <!-- 锁屏状态 -->
-    <div class="screen-info" v-else>
-      <div class="now-time">
-        {{ currentTime }}
+  <client-only>
+    <div class="me-screen-lock">
+      <!-- lock -->
+      <div class="screen-lock" v-if="visiblePin">
+        <me-pin @complete="handlePin"></me-pin>
+        <p class="pin-tip">
+          请输入pin:1234
+          <me-button class="btn" @click="handleVisblePin(false)">取消</me-button>
+        </p>
       </div>
-      <div class="lock-action">
-        <me-button class="btn" @click="handleEnter">进入系统</me-button>
+
+      <!-- 锁屏状态 -->
+      <div class="screen-info" v-else>
+        <div class="now-time">
+          {{ currentTime }}
+        </div>
+        <div class="lock-action">
+          <me-button class="btn" @click="handleEnter">进入系统</me-button>
+        </div>
       </div>
     </div>
-  </div>
+  </client-only>
 </template>
 <script lang="ts" setup >
 import { useNow, useDateFormat } from '@vueuse/core'

@@ -1,4 +1,9 @@
-# Nuxt 3 Minimal Starter
+# ME COVER
+
+:::
+ME COVER build with Nuxt 3, Vue 3 and Typescript.
+:::
+Live demo: [https://me-cover.vercel.app/](https://me-cover.vercel.app/)
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 

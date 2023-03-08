@@ -5,7 +5,7 @@
       <div class="show-bar"></div>
     </div>
 
-    <div class="video-info" :class="{ 'info-hidden': visibleInfo }" v-loading="loading">
+    <div class="video-info" :class="{ 'info-hidden': visibleInfo }">
       <div class="close-btn">
         <me-button icon="ep:minus" size="small" @click="handleMini"></me-button>
         <me-button icon="ep:close" size="small" @click="handleBack"></me-button>
@@ -45,16 +45,19 @@
   </div>
 </template>
 <script setup lang="ts">
+definePageMeta({
+  key: 'preview',
+  keepalive: false,
+})
 const Router = useRouter()
 const Route = useRoute()
-const videoId = Route.query.id as string
 const videoObj = ref<any>({})
 const loading = ref(false)
 const getDetail = async () => {
+  const videoId = Route.query.id as string
   loading.value = true
   const data = await getVideo(videoId)
   loading.value = false
-  console.log(data)
   videoObj.value = data
 }
 getDetail()
@@ -69,6 +72,9 @@ const visibleInfo = ref(false)
 const handleMini = () => {
   visibleInfo.value = !visibleInfo.value
 }
+onActivated(() => {
+  getDetail()
+})
 </script>
 <style lang="less" scoped>
 .preview-page {
@@ -86,6 +92,7 @@ const handleMini = () => {
   width: 450px;
   padding: 20px;
   position: absolute;
+  z-index: 100;
   bottom: 120px;
   left: 60px;
   color: #fff;
@@ -102,8 +109,8 @@ const handleMini = () => {
 
   .close-btn {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 10px;
+    right: 10px;
     display: flex;
     color: #fff;
 
@@ -195,7 +202,7 @@ const handleMini = () => {
   }
 
   .description {
-    font-size: 1.3rem;
+    font-size: 1.30rem;
     margin-bottom: 20px;
   }
 }

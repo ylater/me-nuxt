@@ -1,11 +1,10 @@
 <template>
   <NuxtLayout>
     <NuxtLoadingIndicator />
-    <NuxtPage />
+    <NuxtPage :keepalive="{ exclude: ['preview'] }" />
   </NuxtLayout>
 </template>
 <script lang="ts" setup>
-
 </script>
 <style lang="less">
 html,

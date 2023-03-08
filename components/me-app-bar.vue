@@ -14,8 +14,8 @@
         <div class="time">{{ currentTime }}</div>
       </div>
       <div class="actions">
-        <me-button class="btn" circle icon="ep:search">
-        </me-button>
+        <!-- <me-button class="btn" circle icon="ep:search">
+        </me-button> -->
         <me-button class="btn" circle icon="icon-park:logout" @click="handleOuit">
         </me-button>
       </div>
@@ -103,6 +103,7 @@ const handleOuit = () => {
     height: 24px;
     padding: 0;
     margin-left: 10px;
+    font-size: 13px;
   }
 }
 </style>

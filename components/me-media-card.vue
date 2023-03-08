@@ -45,22 +45,21 @@ const props = defineProps({
 
 const videoRef = ref()
 const play = () => {
+  if (!videoRef.value) return
   videoRef.value.play()
 }
 const pause = () => {
+  if (!videoRef.value) return
   videoRef.value.pause()
   videoRef.value.currentTime = 0
 }
 const handlePlay = (e: Event) => {
-  console.log('handlePlay', e)
   play()
 }
 const handlePause = (e: Event) => {
-  console.log('handlePause', e)
   pause()
 }
 const handleEnded = (e: Event) => {
-  console.log('handleEnded', e)
   pause()
 }
 </script>
