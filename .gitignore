@@ -1,4 +1,6 @@
 node_modules
+.env.development
+.env.production
 *.log*
 .nuxt
 .nitro
@@ -8,5 +10,4 @@ node_modules
 dist
 .DS_Store
 .env.local
-.env.development
-.env.production
+
