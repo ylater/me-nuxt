@@ -2,7 +2,8 @@ import { $fetch } from 'ofetch'
 import LRU from 'lru-cache'
 import { hash as ohash } from 'ohash'
 const apiBaseUrl = 'https://api.coverr.co'
-const API_KEY = 'be873fbf94a22798e77cb0874722dc5a'
+const { VITE_API_KEY } = import.meta.env
+const API_KEY = VITE_API_KEY
 const cache = new LRU({
   max: 500,
   ttl: 2000 * 60 * 60, // 2 hour
