@@ -7,12 +7,12 @@
         <me-button v-if="keyword" @click="handleClear" size="small" icon="ep:close"></me-button>
       </div>
       <div class="search-tags">
-        <span class="tag" v-for="item in categories" @click="getVideosInCategory(item.id)" :key="item.id">{{ item.name
+        <span class="tag" v-for="item in categories" @click="tagSearch(item.id)" :key="item.id">{{ item.name
         }}</span>
       </div>
     </div>
     <div class="pager">
-      <me-pagination v-model:page="page" :total="total" @change="getList"></me-pagination>
+      <me-pagination v-model:page="page" :total="total" @change="getListByPage"></me-pagination>
     </div>
     <ol class="video-list">
       <li class="video-card" v-for="item in list" :key="item.id" @click="handlePreview(item)">
@@ -57,53 +57,65 @@ const query = ref({
 const page = ref(1)
 const total = ref(0)
 const list = ref<any>([])
+const searchType = ref('category')
+const getListByPage = () => {
+  // getList()
+  if (searchType.value === 'keyword') {
+    getList()
+  } else {
+    getVideosInCategory()
+  }
+}
 const getList = async () => {
-  console.log('getList')
   const params = {
-    id: '7bh0a0p2JM',
-    urls: 'true',
+    ...query.value,
+    query: keyword.value,
     page_size: 10,
     page: page.value,
-    // sort_by: 'date'
   }
-  const data = await getCategoriesVideos(params)
-  console.log(params, data)
+  const data = await getVideoList(params)
   list.value = data.hits
   total.value = data.total
 }
-getList()
+
 //search
 const keyword = ref('')
 const handleClear = () => {
   keyword.value = ''
+  searchType.value = ''
   getList()
 }
 const handleSearch = async () => {
-  const params = {
-    ...query.value,
-    query: keyword.value
-  }
-  const data = await getVideoList(params)
-  console.log(data)
-  list.value = data.hits
-  total.value = data.total
+  searchType.value = 'keyword'
+
 
 }
 //分类
+const categorieId = ref('7bh0a0p2JM')
 const categories = ref<any>([])
 const getCategories = async () => {
   const data = await getCategoriesList()
   categories.value = data.hits
 }
-const getVideosInCategory = async (id: string) => {
+const tagSearch = (id: string) => {
+  categorieId.value = id
+  searchType.value = 'category'
+  page.value = 1
+  getVideosInCategory()
+}
+const getVideosInCategory = async () => {
   const params = {
     ...query.value,
-    id: id
+    id: categorieId.value,
+    page_size: 10,
+    page: page.value,
   }
   const data = await getCategoriesVideos(params)
   list.value = data.hits
+  total.value = data.total
 }
 getCategories()
+getVideosInCategory()
 </script>	
 <style lang="less" scoped>
 .home-page {

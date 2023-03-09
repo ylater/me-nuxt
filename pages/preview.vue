@@ -45,6 +45,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { downloadFile } from '@/utils'
 definePageMeta({
   key: 'preview',
   keepalive: false,
@@ -65,7 +66,8 @@ const handleBack = () => {
   Router.go(-1)
 }
 const handleDownload = () => {
-  window.open(videoObj.value.urls.mp4)
+  // window.open(videoObj.value.urls.mp4)
+  downloadFile(videoObj.value.urls.mp4_download, videoObj.value.title)
 }
 //
 const visibleInfo = ref(false)

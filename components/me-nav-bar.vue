@@ -2,7 +2,7 @@
   <div class="me-nav-bar">
     <!-- 模拟的mac menu bar -->
     <div class="menu-bar">
-      <div class="menu-bar-item" v-for="(item, index) in menuList" :key="index">
+      <div class="menu-bar-item" v-for="(item, index) in menuList" :key="index" @click="handleMenuClick(item)">
         <div class="menu-bar-item-inner">
           <div class="menu-bar-item-icon">
             <Icon size="36" :name="item.icon"></Icon>
@@ -16,9 +16,7 @@
 <script lang="ts" setup >
 import { useNow, useDateFormat } from '@vueuse/core'
 import { useAppStore } from '@/stores/index'
-import { openApp } from '@/utils/index'
 const appStore = useAppStore()
-// openApp()
 //home
 const menuList = ref([
   {
@@ -39,9 +37,20 @@ const menuList = ref([
   },
   {
     icon: 'logos:nuxt-icon',
-    text: 'Nuxt'
+    text: 'Nuxt',
+    link: 'https://nuxt.com'
+  }, {
+    icon: 'logos:github-icon',
+    text: 'Github',
+    link: 'https://github.com/ylater/me-nuxt'
   }
 ])
+
+const handleMenuClick = (item: any) => {
+  if (item.link) {
+    window.open(item.link)
+  }
+}
 
 </script>
 <style lang="less" scoped>
