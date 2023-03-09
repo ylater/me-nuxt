@@ -1,7 +1,10 @@
 <template>
   <header class="me-app-bar fixed">
     <div class="left">
-      <h3 class="logo-text">ME COVER</h3>
+      <nuxt-link to="/">
+        <h3 class="logo-text">ME COVER</h3>
+      </nuxt-link>
+
     </div>
     <div class="center">
       <!-- <me-search></me-search> -->
