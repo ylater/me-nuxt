@@ -29,6 +29,9 @@ export default defineNuxtConfig({
     // '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
   ],
+  plugins: [
+    { src: '~/plugins/vercel.ts', mode: 'client' }
+  ],
   pinia: {
     autoImports: ['defineStore', 'acceptHMRUpdate'],
   },
