@@ -1,5 +1,6 @@
 <template>
   <article class="me-media-card">
+    <me-loading v-if="loading"></me-loading>
     <div class="card-media">
       <div class="palyer" v-if="video" @mousemove="handlePlay" @mouseleave="handlePause">
         <video ref="videoRef" :src="video" muted playsinline loop>
@@ -42,8 +43,19 @@ const props = defineProps({
     default: 0,
   },
 })
-
+const loading = ref(true)
 const videoRef = ref()
+//检查视频是否可播放
+const checkVideo = () => {
+  if (!videoRef.value) return
+  videoRef.value.addEventListener('canplay', () => {
+    console.log('canplay')
+    loading.value = false
+  })
+}
+onMounted(() => {
+  checkVideo()
+})
 const play = () => {
   if (!videoRef.value) return
   videoRef.value.play()

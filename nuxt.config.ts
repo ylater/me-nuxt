@@ -2,6 +2,14 @@
 const apiBaseUrl = 'https://api.coverr.co'
 export default defineNuxtConfig({
   app: {
+    head: {
+      title: 'Me Cover',
+      charset: 'utf-8',
+      meta: [
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'description', content: 'Download royalty free (for personal and commercial use), unique and beautiful video footage for your website or any project. No attribution required.' },
+      ]
+    },
     pageTransition: {
       name: 'slide',
       mode: 'out-in' // default
@@ -19,10 +27,30 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     // '@nuxtjs/color-mode',
-    // '@vite-pwa/nuxt',
+    '@vite-pwa/nuxt',
   ],
   pinia: {
     autoImports: ['defineStore', 'acceptHMRUpdate'],
+  },
+  pwa: {
+    manifest: {
+      name: 'Me Cover',
+      short_name: 'Me Cover',
+      description: 'Download royalty free (for personal and commercial use), unique and beautiful video footage for your website or any project. No attribution required.',
+      lang: 'en',
+      theme_color: '#ffffff',
+      background_color: '#ffffff',
+      display: 'standalone',
+      orientation: 'portrait',
+      start_url: '/',
+      icons: [
+        {
+          src: '/icon.png',
+          sizes: '512x512',
+          type: 'image/png',
+        },
+      ],
+    },
   },
   // ...
   runtimeConfig: {

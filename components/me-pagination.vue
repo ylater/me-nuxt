@@ -35,6 +35,8 @@ const props = defineProps({
 })
 const emit = defineEmits(['prev', 'next', 'update:page', 'change'])
 const totalPage = computed(() => {
+  //Q: why use Math.ceil()?
+  //A: if total is 11, pageSize is 10, totalPage should be 2
   return Math.ceil(props.total / props.pageSize)
 })
 const disabledPrev = computed(() => {
