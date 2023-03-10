@@ -115,6 +115,7 @@ useEventListener('keydown', e => {
       font-weight: 500;
       color: whitesmoke;
       transition: opacity 250ms, transform 250ms;
+      outline: none;
     }
   }
 }

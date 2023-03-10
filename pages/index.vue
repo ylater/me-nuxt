@@ -30,7 +30,7 @@
               </div>
             </div>
             <div class="actions">
-              <me-button @click="handlePreview" icon="ep:video-play" size="small"></me-button>
+              <!-- <me-button @click="handlePreview" icon="ep:video-play" size="small"></me-button> -->
             </div>
           </div>
         </me-media-card>
@@ -82,12 +82,14 @@ const getList = async () => {
 const keyword = ref('')
 const handleClear = () => {
   keyword.value = ''
-  searchType.value = ''
-  getList()
+  searchType.value = 'category'
+  page.value = 1
+  getVideosInCategory()
 }
 const handleSearch = async () => {
   searchType.value = 'keyword'
-
+  page.value = 1
+  getList()
 
 }
 //分类
