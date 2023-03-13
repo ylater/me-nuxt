@@ -4,6 +4,13 @@
       v-for="(item, index) in digits">
       <div class="pin-digit-inner">{{ digits[index] }}</div>
     </div>
+    <div class="digit-keyboard" v-if="showKeyboard">
+      <div class="digit-keyboard-row" v-for="(row, index) in keyboard" :key="index">
+        <div class="digit-keyboard-item" v-for="(item, index) in row" :key="index" @click="handleClick(item)">
+          {{ item }}
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts" setup >
@@ -16,6 +23,10 @@ const props = defineProps({
   pin: {
     type: String,
     default: '1234'
+  },
+  showKeyboard: {
+    type: Boolean,
+    default: true
   }
 })
 const emit = defineEmits(['complete', 'error'])
@@ -58,6 +69,34 @@ useEventListener('keydown', e => {
   }
 
 })
+//键盘
+const keyboard = ref([
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+  ['', 0, '']
+])
+const handleClick = (item: number | string) => {
+  if (item === '') return
+  if (focusedIdx.value >= length.value - 1) {
+    digits.value[focusedIdx.value] = item
+    if (checkPin()) {
+      emit('complete')
+    } else {
+      emit('error')
+      showError.value = true
+      setTimeout(() => {
+        //清空输入
+        focusedIdx.value = 0
+        digits.value = new Array(length.value).fill('')
+      }, 1000)
+    }
+  } else {
+    showError.value = false
+    digits.value[focusedIdx.value] = item
+    focusedIdx.value = Math.min(focusedIdx.value + 1, length.value - 1)
+  }
+}
 </script>
 <style lang="less" scoped>
 .me-pin {
@@ -69,11 +108,12 @@ useEventListener('keydown', e => {
   flex-wrap: wrap;
   border-radius: 8px;
   padding: 16px;
+  --me-pin-size: 80px;
 
   .pin-digit {
     position: relative;
-    width: 80px;
-    height: 80px;
+    width: var(--me-pin-size);
+    height: var(--me-pin-size);
     margin: 8px;
     border-radius: 18px;
     background: rgba(255, 255, 255, 0.1);
@@ -120,6 +160,42 @@ useEventListener('keydown', e => {
   }
 }
 
+.digit-keyboard {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .digit-keyboard-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .digit-keyboard-item {
+      width: var(--me-pin-size);
+      height: var(--me-pin-size);
+      margin: 8px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 2px, 2px, 2px, rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: 500;
+      color: whitesmoke;
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+}
+
 @keyframes blink {
   0% {
     opacity: 0;
@@ -131,6 +207,13 @@ useEventListener('keydown', e => {
 
   100% {
     opacity: 0;
+  }
+}
+
+//移动端样式
+@media (max-width:750px) {
+  .me-pin {
+    --me-pin-size: 60px;
   }
 }
 </style>
