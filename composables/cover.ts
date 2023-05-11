@@ -30,7 +30,9 @@ export function _fetch(url: string, params: Record<string, string | number | und
         }),
     )
   }
-  return cache.get(hash)!
+  //Q: 为什么要加！
+  //A: 因为我们知道这里一定是Promise<any>，所以我们可以使用！告诉ts，这里一定有值
+  return cache.get(hash)! as Promise<any>
 }
 
 //视频列表
