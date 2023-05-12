@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     },
   },
   modules: [
+    '@nuxt/devtools',
     '@nuxt/ui',
     '@vueuse/nuxt',
     'nuxt-icon',
@@ -26,6 +27,9 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     // '@nuxtjs/i18n',
   ],
+  devtools: {
+    enabled: true,
+  },
   plugins: [
     { src: '~/plugins/vercel.ts', mode: 'client' },
     {

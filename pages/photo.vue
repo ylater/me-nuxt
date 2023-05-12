@@ -1,61 +1,22 @@
 <template>
   <div class='photo-page'>
-    <!-- <me-carousel :perPage="3">
-      <div class='carousel-item' :class="{ 'active': currentIndex === index }" v-for="(item, index) in list" :key="index">
-        <div class='title'>
-          .0{{ index + 1 }}
-          <br>
-          {{ item.subTitle }}
-        </div>
-        <div class='image'>
-          <img draggable='false' :src='item.img'>
-          <div class='overlay'></div>
-          <div class='cats'>{{ item.desc }}</div>
-          <div class='title'>{{ item.title }}</div>
-          <div class='button'>
-            查看详情
+    <div class="lucky-btn" @click="getCoverImage">
+      <IconCSS class="icon" name="icon-park:refresh"></IconCSS>
+    </div>
+    <div class="bg">
+      <div class="bg-image" :style="getBackgroundStyles"></div>
+      <div class="bg-filter"></div>
+    </div>
+    <div class="search-bar-aligner" :class="{ 'focused': focused }" @click="handleFocus">
+      <div class="search-bar-wrapper">
+        <div class="search-bar" :class="{ 'focused': focused }">
+          <div class="search-icon">
+            <IconCSS class="icon" name="ep:search"></IconCSS>
           </div>
-        </div>
-      </div>
-    </me-carousel> -->
-    <div class="bg"></div>
-    <div class='photo-preview' :class="{ 'expand': visibleFull }">
-      <div class='slideClone'>
-        <div class='title f'>
-          .0{{ currentIndex + 1 }}
-          <br>
-          {{ current.subTitle }}
-        </div>
-        <div class='image'>
-          <img draggable='false' :src='current.img'>
-          <div class='overlay'></div>
-          <div class='cats'>{{ current.desc }}</div>
-          <div class='title'>{{ current.title }}</div>
+          <input @blur="handleBlur" ref="searchInputRef" class="search-bar-input" type="text" placeholder="Search" />
         </div>
       </div>
     </div>
-    <div class='carousel-wrap'>
-      <div class='carousel'>
-        <div class='carousel-item' :class="{ 'active': currentIndex === index }" v-for="(item, index) in list"
-          @click="handlePreview(index)" :key="index">
-          <div class='title'>
-            .0{{ index + 1 }}
-            <br>
-            {{ item.subTitle }}
-          </div>
-          <div class='image'>
-            <img draggable='false' :src='item.img'>
-            <div class='overlay'></div>
-            <div class='cats'>{{ item.desc }}</div>
-            <div class='title'>{{ item.title }}</div>
-            <div class='button'>
-              查看详情
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 </template>
 <script lang="ts" setup>
@@ -63,43 +24,40 @@ definePageMeta({
   key: 'photo',
   layout: 'ylater',
 })
-
-const list = [
-  {
-    title: 'My protein rebrand and digital campaign',
-    subTitle: 'My Protein',
-    desc: 'ADVERTISING DESIGN DIGITAL',
-    img: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/fud.png',
-  },
-  {
-    title: 'Nike Air max video campaign 2017',
-    subTitle: 'Nike Air Max',
-    desc: 'ADVERTISING DESIGN DIGITAL STRATEGY',
-    img: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/nike.png',
-  },
-  {
-    title: 'The new Apple Watch digital campaign 2019',
-    subTitle: 'Apple Watch',
-    desc: 'ADVERTISING DIGITAL STRATEGY',
-    img: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/rpo.jpg',
-  },
-  {
-    title: 'Another agency did this campaign, not us',
-    subTitle: 'Jade Teriyaki',
-    desc: 'ADVERTISING DESIGN DIGITAL STRATEGY',
-    img: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/orangetyhing.png',
-  },
-]
-const current = ref(list[0])
-const currentIndex = ref(0)
-const visibleFull = ref(false)
-const handlePreview = (index: number) => {
-  console.log(index, 'eeeee')
-  currentIndex.value = index
-  current.value = list[index]
-  visibleFull.value = true
+const focused = ref(false)
+const searchInputRef = ref<HTMLInputElement | null | undefined>()
+const handleFocus = () => {
+  focused.value = true
+  // @ts-ignore
+  searchInputRef.value.focus()
 }
-
+const handleBlur = () => {
+  focused.value = false
+}
+//cover
+const cover = ref<any>({})
+function getCoverImage() {
+  //获取当前时间
+  const timestamp = new Date().getTime()
+  const params = {
+    topics: '6sMVjTLSkeQ',
+    timestamp: timestamp
+  }
+  getRandomPhotos(params).then((res) => {
+    cover.value = res
+    console.log(res)
+  })
+}
+const getBackgroundStyles = computed(() => {
+  return {
+    'background-image': `url(${cover.value.urls?.regular})`,
+    'background-color': cover.value.color,
+  }
+})
+getCoverImage()
+//search
+const searching = ref(false)
+const keyword = ref('')
 </script>	
 <style lang="less" scoped>
 @blue: #07101d;
@@ -113,242 +71,178 @@ const handlePreview = (index: number) => {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background-color: @yellow;
-}
+  background-color: #1e1e1e;
 
+  .lucky-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 3;
+    cursor: pointer;
 
-.photo-preview {
-  visibility: hidden;
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: 0;
-
-  &.expand {
-    visibility: visible;
+    .icon {
+      font-size: 30px;
+      color: #fff;
+    }
   }
 }
 
-.carousel-wrap {
-  position: relative;
-  transform: translateX(-800px);
-  perspective: 900px;
-  perspective-origin: 50% 200px;
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  opacity: .4;
 
-  .carousel {
-    transform: translateY(120px);
+
+
+  .bg-image {
     position: absolute;
+    top: 0;
     left: 0;
-    right: 0;
-    width: 30000px;
-    transition: all 0.8s cubic-bezier(0, 0.6, 0.25, 1);
-    transform-style: preserve-3d;
-    pointer-events: none;
-    left: 290.5px;
-    cursor: default;
-    transform: translateX(760px) translateY(120px);
+    width: 100%;
+    height: 100%;
+    background-image: url('https://images.unsplash.com/photo-1532792034154-7fd42c240b25');
+    background-color: rgb(243, 243, 243);
 
-    .carousel-item {
-      width: 700px;
-      height: 750px;
-      float: left;
-      margin-right: 60px;
-      transition: all 0.5s;
-      transform-style: preserve-3d;
-      transform: scale(0);
-      animation: 0s ease 0s 1 normal none running none;
-      transform: rotateY(0deg) scale(1);
-      transition: all 0.5s ease 0s;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transform: scale(1.25);
+    transition: transform 250ms;
+    z-index: 1;
+  }
 
-      .title {
-        font-weight: 800;
-        color: #060608;
+  .bg-filter {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    left: 0px;
+    position: absolute;
+    top: 0px;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: all 250ms;
+
+    &.focus {
+      opacity: 1;
+    }
+  }
+}
+
+.search-bar-aligner {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  pointer-events: none;
+  position: fixed;
+  transition: height 250ms;
+  width: 100%;
+  overflow: hidden;
+  z-index: 3;
+  cursor: pointer;
+
+  .search-bar-wrapper {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 10px;
+    width: 500px;
+    overflow: hidden;
+
+    .search-bar {
+      align-items: center;
+      backdrop-filter: blur(5px);
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      padding: 10px;
+      pointer-events: all;
+      position: relative;
+      width: calc(100% - 20px);
+
+
+
+      .search-icon {
         position: relative;
-        font-size: 22px;
-        transform-style: preserve-3d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: white;
+        font-size: 18px;
+        margin-right: 10px;
+
+        &::after {
+          content: '';
+          position: absolute;
+          width: 4px;
+          height: 4px;
+          right: -10px;
+          border-radius: 50%;
+          transform: all 250ms;
+          background-color: rgba(255, 255, 255, 1);
+          transition: width 250ms, height 250ms;
+        }
       }
 
-      &.active {
-        transform: rotateY(0deg) scale(1);
-        transition: all 0.5s ease 0s;
+      .search-bar-input {
+        background-color: transparent;
+        border: none;
+        color: white;
+        font-size: 1em;
+        height: 40px;
+        outline: none;
+        padding: 10px 0px;
+        text-align: left;
+        transition: width 250ms;
+        width: 64px;
+        font-size: 16px;
+        font-weight: bold;
 
-        .image {
+        &::placeholder {
+          font-weight: 500;
+          font-size: 15px;
+          color: rgba(255, 255, 255, 1);
+        }
 
-          .overlay,
-          .cats,
-          .title,
-          .button {
-            opacity: 1;
+        &:focus {
+          width: 100%;
+
+          &::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+
           }
         }
       }
 
-      .image {
-        position: relative;
-        margin-top: 10px;
-        padding: 94px 94px;
-        height: 380px;
-        transform-style: preserve-3d;
+      &.focused {
+        background-color: rgba(255, 255, 255, 0.2);
+        width: 100%;
 
-        img {
-          position: absolute;
-          left: 0;
-          z-index: -1;
-          top: 0;
-          height: 100%;
-        }
-
-        .overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(11, 18, 27, 0.7);
-          z-index: -1;
-          opacity: 0;
-
-          transition: opacity 0.1s,
-            transform 0.8s 0.7s cubic-bezier(0.79, -0.01, 0, 0.99);
-        }
-
-        .cats {
-          color: @yellow;
-          font-weight: 700;
-          font-size: 12px;
-          left: 0;
-          transition: all 0.8s 0.16s cubic-bezier(0.79, -0.01, 0, 0.99);
-          transform-style: preserve-3d;
-          opacity: 0;
-        }
-
-        .title {
-          font-weight: 800;
-          color: white;
-          width: 350px;
-          font-size: 28px;
-          margin-top: 10px;
-          line-height: 35px;
-          transform-style: preserve-3d;
-          position: relative;
-          transition: all 0.6s 0.2s;
-          margin: 22px 0 16px 0;
-          opacity: 0;
-        }
-
-        .button {
-          color: @blue;
-          font-size: 14px;
-          cursor: pointer;
-          margin-top: 14px;
-          background: @yellow;
-          float: left;
-          padding: 12px 40px 14px 20px;
-          transform-style: preserve-3d;
-          position: relative;
-          transition: all 0.6s 0.3s;
-          opacity: 0;
-
-          img {
-            width: 14px;
-            height: auto;
-            position: absolute;
-            right: 17px;
-            left: auto;
-            top: 16px;
+        .search-icon {
+          &::after {
+            width: 1px;
+            height: 100%;
+            border-radius: 2px;
           }
         }
       }
     }
   }
-}
 
-
-
-
-
-
-
-@keyframes carouselIn {
-  from {
-    transform: scale(0);
+  &.searching {
+    height: 100px;
   }
 
-  to {
-    transform: scale(1);
-  }
-}
 
-@keyframes fade {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
-
-
-
-@keyframes hr {
-  from {
-    width: 0;
-  }
-
-  to {
-    width: 70px;
-  }
-}
-
-@keyframes hrOut {
-  from {
-    width: 70px;
-  }
-
-  to {
-    width: 0px;
-  }
-}
-
-@keyframes spark {
-  from {
-    clip-path: polygon(0 0, 0% 0%, 0% 100%, 0% 100%);
-  }
-
-  to {
-    clip-path: polygon(0 0, 100% 0%, 100% 100%, 0% 100%);
-  }
-}
-
-.scroll {
-  position: absolute;
-  left: calc(50% - 348px);
-  top: 458px;
-  transition: all 0.8s 0s;
-  opacity: 0;
-}
-
-.back {
-  position: absolute;
-  height: 100vh;
-
-  img {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: rotate(90deg);
-    bottom: 73px !important;
-    position: absolute;
-  }
 }
 </style>	
