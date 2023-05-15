@@ -1,25 +1,48 @@
 <template>
   <div class='photo-page'>
-    <div class="lucky-btn" @click="getCoverImage">
+    <!-- <div class="lucky-btn" @click="getCoverImage">
       <IconCSS class="icon" name="icon-park:refresh"></IconCSS>
-    </div>
+    </div> -->
     <div class="bg">
       <div class="bg-image" :style="getBackgroundStyles"></div>
-      <div class="bg-filter"></div>
+      <div class="bg-filter" :class="{ 'focus': searching }"></div>
     </div>
-    <div class="search-bar-aligner" :class="{ 'focused': focused }" @click="handleFocus">
+    <me-search-bar v-model="keyword" @search="onPressEnter" @reset="resetSearch"></me-search-bar>
+    <!-- <div class="search-bar-aligner" :class="{ 'searching': searching }" @click="handleFocus">
       <div class="search-bar-wrapper">
-        <div class="search-bar" :class="{ 'focused': focused }">
+        <div class="search-bar">
           <div class="search-icon">
             <IconCSS class="icon" name="ep:search"></IconCSS>
           </div>
-          <input @blur="handleBlur" ref="searchInputRef" class="search-bar-input" type="text" placeholder="Search" />
+          <input v-model="keyword" @blur="handleBlur" @keyup.enter="onPressEnter" ref="searchInputRef"
+            class="search-bar-input" type="text" placeholder="Search" />
+        </div>
+      </div>
+    </div> -->
+    <div class="photos" v-if="photos.length">
+      <div class="photo-list">
+        <div class="photo-item" v-for="(photo, index) in photos" :key="photo.id" :style="{
+          //5-10随机
+          gridRowEnd: photo.gridRowEnd,
+        }" @click="handleDetail(photo, index)">
+          <div class="photo-image visible">
+            <img :src="photo.urls?.regular" alt="" />
+          </div>
+          <div class="photo-info">
+            <div class="photo-title">
+              {{ photo.user.username }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <a-image-preview-group v-if="visibleOverlay" v-model:visible="visibleOverlay" v-model:current="current" infinite
+      :srcList="photosList"></a-image-preview-group>
+    <!-- <PhotoPreview v-if="visibleOverlay" :photo="photo" @close="close"></PhotoPreview> -->
   </div>
 </template>
 <script lang="ts" setup>
+import PhotoPreview from './photo-preview.vue'
 definePageMeta({
   key: 'photo',
   layout: 'ylater',
@@ -32,6 +55,7 @@ const handleFocus = () => {
   searchInputRef.value.focus()
 }
 const handleBlur = () => {
+  if (searching.value) focused.value = true
   focused.value = false
 }
 //cover
@@ -40,8 +64,8 @@ function getCoverImage() {
   //获取当前时间
   const timestamp = new Date().getTime()
   const params = {
-    topics: '6sMVjTLSkeQ',
-    timestamp: timestamp
+    topics: 'Jpg6Kidl-Hk',
+    // timestamp: timestamp
   }
   getRandomPhotos(params).then((res) => {
     cover.value = res
@@ -50,14 +74,82 @@ function getCoverImage() {
 }
 const getBackgroundStyles = computed(() => {
   return {
-    'background-image': `url(${cover.value.urls?.regular})`,
+    'background-image': `url(${cover.value.urls?.regular || 'https://images.unsplash.com/photo-1683567936098-c7341e859233?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1031&q=80'})`,
     'background-color': cover.value.color,
   }
 })
-getCoverImage()
 //search
 const searching = ref(false)
-const keyword = ref('')
+const keyword = ref('cat')
+function onPressEnter() {
+  if (!keyword.value) return
+  searching.value = true
+  focused.value = true
+  page.value = 1
+  getPhotos()
+}
+//photo list
+const page = ref(1)
+const per_page = ref(20)
+const total = ref(0)
+const params = computed(() => {
+  return {
+    query: keyword.value,
+    page: page.value,
+    per_page: per_page.value
+  }
+})
+const photos = ref<any>([])
+const getPhotos = () => {
+  getSearchPhotos(params.value).then((res) => {
+    photos.value = res.results.map((v: any) => {
+      return {
+        ...v,
+        gridRowEnd: gridRowEnd()
+      }
+    })
+    total.value = res.total
+    console.log(res)
+  })
+}
+const gridRowEnd = () => {
+  //5-10随机
+  const rowEnd = Math.floor(Math.random() * (10 - 5 + 1) + 5)
+  console.log(rowEnd)
+  return `span ${rowEnd}`
+}
+const setVisible = () => {
+}
+//detail
+const photo = ref<any>({})
+const visibleOverlay = ref(false)
+const current = ref(0)
+const photosList = computed(() => {
+  return photos.value.map((v: any) => {
+    return v.urls?.regular
+  })
+})
+function handleDetail(item: any, index: number) {
+  photo.value = { ...item }
+  current.value = index
+  visibleOverlay.value = true
+}
+function close() {
+  visibleOverlay.value = false
+}
+
+//reset
+const resetSearch = () => {
+  searching.value = false
+  focused.value = false
+  page.value = 1
+  photos.value = []
+  total.value = 0
+}
+//init
+
+getCoverImage()
+// onPressEnter()
 </script>	
 <style lang="less" scoped>
 @blue: #07101d;
@@ -68,20 +160,18 @@ const keyword = ref('')
   position: relative;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  overflow: auto;
   background-color: #1e1e1e;
 
   .lucky-btn {
-    position: absolute;
+    position: fixed;
     top: 20px;
     right: 20px;
     z-index: 3;
     cursor: pointer;
 
     .icon {
-      font-size: 30px;
+      font-size: 20px;
       color: #fff;
     }
   }
@@ -91,7 +181,7 @@ const keyword = ref('')
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   overflow: hidden;
   opacity: .4;
@@ -99,14 +189,12 @@ const keyword = ref('')
 
 
   .bg-image {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('https://images.unsplash.com/photo-1532792034154-7fd42c240b25');
     background-color: rgb(243, 243, 243);
-
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -167,7 +255,9 @@ const keyword = ref('')
       padding: 10px;
       pointer-events: all;
       position: relative;
-      width: calc(100% - 20px);
+      // width: calc(100% - 20px);
+      width: 100%;
+      overflow: hidden;
 
 
 
@@ -184,10 +274,10 @@ const keyword = ref('')
         &::after {
           content: '';
           position: absolute;
-          width: 4px;
-          height: 4px;
+          width: 1px;
+          height: 100%;
           right: -10px;
-          border-radius: 50%;
+          border-radius: 2px;
           transform: all 250ms;
           background-color: rgba(255, 255, 255, 1);
           transition: width 250ms, height 250ms;
@@ -204,9 +294,10 @@ const keyword = ref('')
         padding: 10px 0px;
         text-align: left;
         transition: width 250ms;
-        width: 64px;
+        width: 100%;
         font-size: 16px;
         font-weight: bold;
+        overflow: hidden;
 
         &::placeholder {
           font-weight: 500;
@@ -215,24 +306,11 @@ const keyword = ref('')
         }
 
         &:focus {
-          width: 100%;
+          flex: 1;
 
           &::placeholder {
             color: rgba(255, 255, 255, 0.2);
 
-          }
-        }
-      }
-
-      &.focused {
-        background-color: rgba(255, 255, 255, 0.2);
-        width: 100%;
-
-        .search-icon {
-          &::after {
-            width: 1px;
-            height: 100%;
-            border-radius: 2px;
           }
         }
       }
@@ -244,5 +322,108 @@ const keyword = ref('')
   }
 
 
+}
+
+.photos {
+  flex: 1;
+  overflow: hidden;
+  margin: 0 auto;
+  margin-top: 130px;
+  max-width: 1000px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+
+  .photo-list {
+    display: grid;
+    gap: 10px;
+    grid-auto-rows: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    padding: 10px;
+    padding-bottom: 50px;
+
+    .photo-item {
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+      // opacity: 0;
+      overflow: hidden;
+      position: relative;
+      transform: translateY(20px);
+      transition: opacity 250ms, transform 250ms;
+      cursor: pointer;
+
+      // &:hover {
+      //   transform: scale(1.05);
+      // }
+
+      .photo-image {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: all .2s ease-in-out;
+        filter: blur(3px);
+
+        &.visible {
+          opacity: 1;
+          transition: all .2s ease-in-out;
+          filter: blur(0);
+
+          img {
+            transform: scale(1);
+            transition: all .2s ease-in-out;
+          }
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transform: scale(1.2);
+          transition: all .2s ease-in-out;
+        }
+      }
+
+      &:hover {
+        .photo-image {
+          transform: scale(1.05);
+        }
+      }
+
+      .photo-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, .5);
+        color: #fff;
+        font-size: 14px;
+
+        .photo-author {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+
+          .photo-author-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            overflow: hidden;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.arco-image-preview-wrapper {
+  backdrop-filter: blur(5px);
 }
 </style>	

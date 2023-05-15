@@ -9,23 +9,23 @@
           <div class="content">
             <img width="120" src="@/assets/logo.svg" />
             <h1>YLATER</h1>
-            <p>提供优质独立开发服务:WEB、小程序、H5\APP等。</p>
+            <p>提供优质独立开发服务：WEB、小程序、H5、APP等。</p>
           </div>
         </div>
         <div class="card">
-
+          <div>Photo</div>
         </div>
         <div class="card">
-
+          <div>Video</div>
         </div>
         <div class="card">
-
+          <div>About</div>
         </div>
         <div class="card">
-
+          <div>羽毛球</div>
         </div>
         <div class="card">
-
+          <div>羽毛球</div>
         </div>
 
       </section>
@@ -102,10 +102,10 @@ h1 {
 
   span {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
     border: rgba(255, 255, 255, .1) 2px solid;
     transition: 0.5s;
 
@@ -212,6 +212,7 @@ h1 {
     border-radius: 25px;
     box-shadow: -2px 4px 15px rgb(0 0 0 / 26%);
     background-color: rgba(255, 255, 255, .1);
+    overflow: hidden;
 
     .mQ(470px) {
       grid-column: span 1;

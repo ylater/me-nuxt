@@ -39,3 +39,7 @@ export function _fetch(url: string, params: Record<string, string | number | und
 export async function getRandomPhotos(params: Record<string, string | number | undefined> = {}) {
   return await _fetch('/photos/random', params)
 }
+//搜索图片
+export async function getSearchPhotos(params: Record<string, string | number | undefined> = {}) {
+  return await _fetch('/search/photos', params)
+}
