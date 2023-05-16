@@ -43,3 +43,4 @@ export async function getRandomPhotos(params: Record<string, string | number | u
 export async function getSearchPhotos(params: Record<string, string | number | undefined> = {}) {
   return await _fetch('/search/photos', params)
 }
+//获取图片详情

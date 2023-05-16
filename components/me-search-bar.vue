@@ -25,6 +25,7 @@ const props = defineProps({
     default: false
   }
 })
+const tips = ref('Hello. Please click  Enter to search.')
 const emit = defineEmits(['search', 'reset', 'update:modelValue'])
 const keyword = ref(props.modelValue)
 const searching = ref(props.isSearching)

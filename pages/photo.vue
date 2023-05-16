@@ -20,29 +20,41 @@
       </div>
     </div> -->
     <div class="photos" v-if="photos.length">
-      <div class="photo-list">
-        <div class="photo-item" v-for="(photo, index) in photos" :key="photo.id" :style="{
-          //5-10随机
-          gridRowEnd: photo.gridRowEnd,
-        }" @click="handleDetail(photo, index)">
-          <div class="photo-image visible">
-            <img :src="photo.urls?.regular" alt="" />
-          </div>
-          <div class="photo-info">
-            <div class="photo-title">
-              {{ photo.user.username }}
+      <me-observer :isLoading="isLoading" @loadMore="loadData">
+        <div class="photo-list">
+          <div class="photo-item" v-for="(photo, index) in photos" :key="photo.id" :style="{
+            //5-10随机
+            gridRowEnd: photo.gridRowEnd,
+          }" @click="handleDetail(photo, index)">
+            <div class="photo-image visible">
+              <img :src="photo.urls?.regular" alt="" />
+            </div>
+            <div class="photo-info">
+              <div class="photo-title">
+                {{ photo.user.username }}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </me-observer>
     </div>
     <a-image-preview-group v-if="visibleOverlay" v-model:visible="visibleOverlay" v-model:current="current" infinite
-      :srcList="photosList"></a-image-preview-group>
-    <!-- <PhotoPreview v-if="visibleOverlay" :photo="photo" @close="close"></PhotoPreview> -->
+      :srcList="photosList">
+      <template #actions>
+        <div class="arco-image-preview-toolbar-action" @click="downloadImage">
+          <a-tooltip content="原图下载">
+            <a-spin v-if="downloading" />
+            <span v-else class="arco-image-preview-toolbar-action-content">
+              <Icon style="display: flex;" name="icon-park:download" size="14"></Icon>
+            </span>
+          </a-tooltip>
+        </div>
+      </template>
+    </a-image-preview-group>
   </div>
 </template>
 <script lang="ts" setup>
-import PhotoPreview from './photo-preview.vue'
+import { saveAs } from 'file-saver'
 definePageMeta({
   key: 'photo',
   layout: 'ylater',
@@ -74,7 +86,7 @@ function getCoverImage() {
 }
 const getBackgroundStyles = computed(() => {
   return {
-    'background-image': `url(${cover.value.urls?.regular || 'https://images.unsplash.com/photo-1683567936098-c7341e859233?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1031&q=80'})`,
+    'background-image': `url(${cover.value.urls?.regular})`,
     'background-color': cover.value.color,
   }
 })
@@ -86,6 +98,7 @@ function onPressEnter() {
   searching.value = true
   focused.value = true
   page.value = 1
+  photos.value = []
   getPhotos()
 }
 //photo list
@@ -100,17 +113,28 @@ const params = computed(() => {
   }
 })
 const photos = ref<any>([])
+const isLoading = ref(false)
 const getPhotos = () => {
+  isLoading.value = true
   getSearchPhotos(params.value).then((res) => {
-    photos.value = res.results.map((v: any) => {
+    const list = res.results.map((v: any) => {
       return {
         ...v,
         gridRowEnd: gridRowEnd()
       }
     })
+    photos.value = [...photos.value, ...list]
     total.value = res.total
-    console.log(res)
+  }).finally(() => {
+    isLoading.value = false
   })
+}
+
+
+const loadData = () => {
+  if (photos.value.length >= total.value) return
+  page.value++
+  getPhotos()
 }
 const gridRowEnd = () => {
   //5-10随机
@@ -137,7 +161,16 @@ function handleDetail(item: any, index: number) {
 function close() {
   visibleOverlay.value = false
 }
-
+//download
+const downloadUrl = computed(() => {
+  return photos.value[current.value].urls?.full + '?force=true'
+})
+const downloading = ref(false)
+const downloadImage = () => {
+  downloading.value = true
+  saveAs(downloadUrl.value, photos.value[current.value].id)
+  downloading.value = false
+}
 //reset
 const resetSearch = () => {
   searching.value = false

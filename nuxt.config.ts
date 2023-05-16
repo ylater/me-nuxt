@@ -40,7 +40,7 @@ export default defineNuxtConfig({
     autoImports: ['defineStore', 'acceptHMRUpdate'],
   },
   nitro: {
-    plugins: ["@/server/db/index.ts"],
+    // plugins: ["@/server/db/index.ts"],
   },
   // i18n: {
   //   vueI18n: './locale/index.ts',
