@@ -3,7 +3,6 @@ import LRU from 'lru-cache'
 import { hash as ohash } from 'ohash'
 const apiBaseUrl = 'https://api.unsplash.com/'
 const { VITE_UNSPLASH_KEY } = import.meta.env
-console.log(VITE_UNSPLASH_KEY, 'VITE_UNSPLASH_KEY', import.meta.env)
 const API_KEY = VITE_UNSPLASH_KEY
 const cache = new LRU({
   max: 500,
@@ -43,4 +42,7 @@ export async function getRandomPhotos(params: Record<string, string | number | u
 export async function getSearchPhotos(params: Record<string, string | number | undefined> = {}) {
   return await _fetch('/search/photos', params)
 }
-//获取图片详情
+//获取图片topics
+export async function getPhotoTopics(params: Record<string, string | number | undefined> = {}) {
+  return await _fetch('/topics', params)
+}

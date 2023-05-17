@@ -2,32 +2,63 @@
   <div class='home-page'>
     <div class="album">
       <section class="section">
-        <div class="card square">
-          <span></span>
-          <span></span>
-          <span></span>
+        <me-card class="card">
           <div class="content">
             <img width="120" src="@/assets/logo.svg" />
             <h1>YLATER</h1>
             <p>提供优质独立开发服务：WEB、小程序、H5、APP等。</p>
           </div>
-        </div>
-        <div class="card">
-          <div>Photo</div>
-        </div>
-        <div class="card">
-          <div>Video</div>
-        </div>
-        <div class="card">
-          <div>About</div>
-        </div>
-        <div class="card">
-          <div>羽毛球</div>
-        </div>
-        <div class="card">
-          <div>羽毛球</div>
-        </div>
+        </me-card>
+        <me-card class="card">
+          <div class="topics-box ">
+            <div class="topics">
+              <div class="topic" v-for="item in topics">
+                <div class="topic-cover">
+                  <img :src="item.cover_photo.urls.small" alt="">
+                </div>
+                <div class="topic-title">{{ item.title }}</div>
+              </div>
+              <div class="topic" v-for="item in topics">
+                <div class="topic-cover">
+                  <img :src="item.cover_photo.urls.small" alt="">
+                </div>
+                <div class="topic-title">{{ item.title }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-info">
+            <div>
+              <h2 class="card-title">图片搜索</h2>
+              <p class="card-text">海量无版权可商用的高清图片</p>
+            </div> <router-link to="/photo">
+              <a-button type="outline" shape="circle">
+                <icon name="ep:arrow-right" color="#fff"></icon>
+              </a-button></router-link>
+          </div>
+        </me-card>
+        <me-card class="card">
+          <me-cover class="bg-cover" style="width:100%;height: 100%;border-radius:16px" autoplay></me-cover>
+          <div class="card-info">
+            <div>
+              <h2 class="card-title">背景视频</h2>
+              <p class="card-text">海量无版权可商用的高清视频</p>
+            </div>
+            <a-button type="outline" shape="circle">
+              <router-link to="/cover">
+                <icon name="ep:arrow-right"></icon>
+              </router-link>
+            </a-button>
+          </div>
+        </me-card>
+        <me-card class="card">
 
+        </me-card>
+        <me-card class="card">
+          <div>Photo</div>
+        </me-card>
+        <me-card class="card">
+          <me-slider></me-slider>
+        </me-card>
       </section>
     </div>
   </div>
@@ -38,7 +69,16 @@ definePageMeta({
   key: 'index',
   layout: 'ylater',
 })
-
+const topics = ref<any[]>([])
+function getTopics() {
+  getPhotoTopics({ per_page: 100 }).then(res => {
+    console.log(res)
+    topics.value = res
+  }).catch(err => {
+    console.log(err)
+  })
+}
+getTopics()
 </script>	
 <style lang="less" scoped>
 .home-page {
@@ -209,10 +249,54 @@ h1 {
   }
 
   .card {
+    position: relative;
     border-radius: 25px;
     box-shadow: -2px 4px 15px rgb(0 0 0 / 26%);
     background-color: rgba(255, 255, 255, .1);
-    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg,
+          #202023, transparent 30%, transparent 70%,
+          #202023);
+      z-index: 1;
+    }
+
+    // overflow: hidden;
+    .card-info {
+      width: 100%;
+      position: absolute;
+      z-index: 10;
+      bottom: 0;
+      left: 0;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+
+      .card-title {
+        font-size: 24px;
+        font-weight: 500;
+        margin-bottom: 10px;
+      }
+
+      .card-text {
+        font-size: 13;
+        font-weight: 300;
+      }
+
+      :deep(.arco-btn-outline) {
+        border-color: #fff;
+        color: #fff;
+      }
+
+    }
 
     .mQ(470px) {
       grid-column: span 1;
@@ -255,59 +339,96 @@ h1 {
       font-size: clamp(0.9rem, 0.8750rem + 0.1250vw, 1rem);
       line-height: 1.4;
     }
+  }
+}
 
+.topics-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 
-    img {
-      border-radius: 25px;
+}
+
+.topics {
+  position: relative;
+  width: 100%;
+  height: fit-content;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  animation: loop 100s linear infinite normal;
+
+  @keyframes loop {
+    0% {
+      transform: translateX(0);
     }
 
-    .card__img {
-      position: relative;
-      height: 100%;
-
-      .card__overlay {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        content: "";
-        color: #fff;
-        padding: clamp(0.938rem, 5vw, 1.563rem);
-        background: rgb(2, 2, 46);
-        background: linear-gradient(0deg, rgb(0 0 0 / 57%) 0%, rgb(255 255 255 / 0%) 100%);
-        width: 100%;
-        height: 100%;
-        border-radius: 25px;
-        display: flex;
-        justify-content: flex-end;
-        flex-direction: column;
-      }
-
-      span {
-        position: absolute;
-        top: 25px;
-        left: min(2vmax, 1.563rem);
-        color: #ff7b29;
-        background: #fff;
-        border-radius: 50px;
-        padding: 2px 8px 2px 6px;
-        display: flex;
-        box-shadow: 0px 1px 20px #0000002b;
-
-        .mQ(690px) {
-          top: 20px;
-        }
-
-        .mQ(470px) {
-          top: 15px;
-        }
-
-        svg {
-          fill: #ff7b29;
-          width: 20px;
-          margin-right: 2px;
-        }
-      }
+    100% {
+      transform: translateY(-50%);
     }
   }
+
+
+
+  .topic {
+    position: relative;
+    grid-column-gap: 10px;
+    overflow: hidden;
+    background-color: #222;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: -2px 4px 15px rgb(0 0 0 / 26%);
+    cursor: pointer;
+    overflow: hidden;
+    z-index: 2;
+    grid-row-end: span 3;
+
+    &:nth-child(2n+1) {
+
+      grid-row-end: span 8;
+    }
+
+
+
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30%;
+      // background-color: rgba(0, 0, 0, .5);
+      background-image: linear-gradient(transparent, rgba(0, 0, 0, .5));
+      z-index: 1;
+    }
+
+    .topic-cover {
+      width: 100%;
+      height: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+    }
+
+    .topic-title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px 15px;
+      color: #fff;
+      z-index: 2;
+      font-size: 1.5rem;
+      font-weight: 700;
+
+    }
+  }
+
 }
 </style>	
