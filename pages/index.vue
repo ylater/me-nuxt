@@ -1,12 +1,12 @@
 <template>
   <div class='home-page'>
+    <me-particles></me-particles>
     <div class="album">
       <section class="section">
         <me-card class="card">
-          <div class="content">
-            <img width="120" src="@/assets/logo.svg" />
+          <div class="logo-card content">
+            <img width="80" src="@/assets/logo.svg" />
             <h1>YLATER</h1>
-            <p>提供优质独立开发服务：WEB、小程序、H5、APP等。</p>
           </div>
         </me-card>
         <me-card class="card">
@@ -18,12 +18,7 @@
                 </div>
                 <div class="topic-title">{{ item.title }}</div>
               </div>
-              <div class="topic" v-for="item in topics">
-                <div class="topic-cover">
-                  <img :src="item.cover_photo.urls.small" alt="">
-                </div>
-                <div class="topic-title">{{ item.title }}</div>
-              </div>
+
             </div>
           </div>
           <div class="card-info">
@@ -51,10 +46,39 @@
           </div>
         </me-card>
         <me-card class="card">
+          <div class="user-card">
+            <div class="user-profile">
 
+              <div class="user-avatar">
+                <img src="@/assets/avatar.png" />
+              </div>
+              <div class="user-info">
+                <div class="name">Murphy</div>
+                <div class="meta">Front-end Developer from CHINA</div>
+                <div class="meta">todengzw@gmail.com</div>
+              </div>
+              <div class="social">
+                <a>
+                  <icon name="bxl:github"></icon>
+                </a>
+                <a>
+                  <icon name="bxl:twitter"></icon>
+                </a>
+                <a>
+                  <icon name="bxl:instagram"></icon>
+                </a>
+                <a>
+                  <icon name="bxl:telegram"></icon>
+                </a>
+
+              </div>
+            </div>
+          </div>
         </me-card>
         <me-card class="card">
-          <div>Photo</div>
+          <div class="bwf">
+            <img src="@/assets/bwf.jpg" />
+          </div>
         </me-card>
         <me-card class="card">
           <me-slider></me-slider>
@@ -89,30 +113,21 @@ getTopics()
   --color-5: #f9002f;
 }
 
-h1 {
-  font-size: 6vw;
-  font-weight: 900;
-  width: min-content;
-  margin: auto;
-  text-transform: uppercase;
-  background: linear-gradient(219deg,
-      var(--color-1) 19%,
-      transparent 19%, transparent 20%,
-      var(--color-2) 20%, var(--color-2) 39%,
-      transparent 39%, transparent 40%,
-      var(--color-3) 40%, var(--color-3) 59%,
-      transparent 59%, transparent 60%,
-      var(--color-4) 60%, var(--color-4) 79%,
-      transparent 79%, transparent 80%,
-      var(--color-5) 80%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+.logo-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-  &+p {
-    font-weight: 500;
-    color: #fff;
-    text-align: center;
+  h1 {
+    font-size: 6vw;
+    font-weight: 900;
+    width: min-content;
+    margin: 12px auto;
+    text-transform: uppercase;
     background: linear-gradient(219deg,
         var(--color-1) 19%,
         transparent 19%, transparent 20%,
@@ -126,8 +141,29 @@ h1 {
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
+
+    &+p {
+      font-weight: 500;
+      color: #fff;
+      text-align: center;
+      background: linear-gradient(219deg,
+          var(--color-1) 19%,
+          transparent 19%, transparent 20%,
+          var(--color-2) 20%, var(--color-2) 39%,
+          transparent 39%, transparent 40%,
+          var(--color-3) 40%, var(--color-3) 59%,
+          transparent 59%, transparent 60%,
+          var(--color-4) 60%, var(--color-4) 79%,
+          transparent 79%, transparent 80%,
+          var(--color-5) 80%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
   }
 }
+
+
 
 
 .square {
@@ -175,17 +211,7 @@ h1 {
 }
 
 
-.content {
-  position: relative;
-  color: #fff;
-  text-align: center;
-  transition: 0.5s;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+
 
 @keyframes animate {
   0% {
@@ -252,20 +278,20 @@ h1 {
     position: relative;
     border-radius: 25px;
     box-shadow: -2px 4px 15px rgb(0 0 0 / 26%);
-    background-color: rgba(255, 255, 255, .1);
+    // background-color: rgba(255, 255, 255, .1);
 
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(180deg,
-          #202023, transparent 30%, transparent 70%,
-          #202023);
-      z-index: 1;
-    }
+    // &::after {
+    //   content: '';
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   width: 100%;
+    //   height: 100%;
+    //   background: linear-gradient(180deg,
+    //       #202023, transparent 30%, transparent 70%,
+    //       #202023);
+    //   z-index: 1;
+    // }
 
     // overflow: hidden;
     .card-info {
@@ -343,10 +369,23 @@ h1 {
 }
 
 .topics-box {
-  position: relative;
   width: 100%;
   height: 100%;
+  flex: 1;
   overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: linear-gradient(180deg,
+        #202023, transparent 10%, transparent 80%,
+        #202023);
+  }
 
 }
 
@@ -386,7 +425,6 @@ h1 {
     grid-row-end: span 3;
 
     &:nth-child(2n+1) {
-
       grid-row-end: span 8;
     }
 
@@ -405,6 +443,7 @@ h1 {
     }
 
     .topic-cover {
+      overflow: hidden;
       width: 100%;
       height: 100%;
 
@@ -413,6 +452,7 @@ h1 {
         height: 100%;
         object-fit: cover;
         object-position: center;
+        pointer-events: none;
       }
     }
 
@@ -430,5 +470,113 @@ h1 {
     }
   }
 
+}
+
+.user-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(45deg, #102eff, #d2379b);
+  border-radius: 12px;
+  overflow: hidden;
+
+}
+
+.user-profile {
+  position: relative;
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, .1);
+  border-radius: 12px;
+  box-shadow: 0px 8px 60px -10px rgba(13, 28, 39, 0.6);
+  padding-bottom: 30px;
+
+  .user-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    overflow: hidden;
+    box-shadow: 0px 5px 50px 0px #6c44fc, 0px 0px 0px 7px rgba(107, 74, 255, 0.5);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+
+    .name {
+      font-size: 30px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      // color: #6944ff;
+    }
+
+    .meta {
+      // color: #324e63;
+      font-size: 13px;
+      margin-bottom: 8px;
+      opacity: .8;
+      letter-spacing: 1px;
+    }
+
+  }
+}
+
+.social {
+  display: flex;
+  align-items: center;
+  margin-top: 30px;
+
+  a {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .01);
+    backdrop-filter: blur(10px);
+    margin: 0 5px;
+    transition: all .3s ease-in-out;
+    font-size: 20px;
+    color: #fff;
+
+    &:hover {
+      background: rgba(255, 255, 255, .2);
+    }
+  }
+}
+
+.bwf {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 </style>	

@@ -1,9 +1,12 @@
 <template>
-  <canvas ref="canvasRef"></canvas>
+  <canvas ref="canvasRef" class="fireworks"></canvas>
 </template>
 
 <script lang="ts" setup>
-const canvasRef = ref()
+import { reactive, onMounted } from 'vue';
+
+const canvasRef = ref<HTMLCanvasElement | null>(null);
+
 class Particle {
   x: number;
   y: number;
@@ -11,10 +14,11 @@ class Particle {
   speedX: number;
   speedY: number;
   color: string;
+
   constructor({ width, height }: { width: number, height: number }) {
     this.x = Math.random() * width;
     this.y = Math.random() * height;
-    this.size = Math.random() * 10 + 1;
+    this.size = Math.random() * 10 + 3;
     this.speedX = Math.random() * 3 - 1.5;
     this.speedY = Math.random() * 3 - 1.5;
     this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
@@ -32,17 +36,28 @@ class Particle {
     this.x += this.speedX;
     this.y += this.speedY;
 
-    if (this.size > 0.2) this.size -= 0.1;
+    if (this.size > 2) this.size -= 1;
     if (this.x < 0 || this.x > width) this.speedX *= -1;
     if (this.y < 0 || this.y > height) this.speedY *= -1;
   }
 }
-function initParticles() {
-  const canvas = canvasRef.value
-  const ctx = canvas.getContext('2d')
-  const width = canvas.width = window.innerWidth
-  const height = canvas.height = window.innerHeight
+
+function createParticles(width: number, height: number) {
   const particles = Array.from({ length: 100 }, () => new Particle({ width, height }));
+  return particles;
+}
+
+function initParticles() {
+  const canvas = canvasRef.value;
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const width = canvas.width = window.innerWidth;
+  const height = canvas.height = window.innerHeight;
+  const particles = createParticles(width, height);
+
   function animate() {
     ctx.clearRect(0, 0, width, height);
     particles.forEach((p) => {
@@ -51,11 +66,23 @@ function initParticles() {
     });
     requestAnimationFrame(animate);
   }
+
   animate();
 }
 
 onMounted(() => {
-  initParticles()
-})
+  initParticles();
+});
 </script>
+
+
+<style scoped>
+.fireworks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+</style>
+
 <style lang="less" scoped></style>

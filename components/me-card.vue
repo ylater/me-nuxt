@@ -4,7 +4,9 @@
     '--y': `${elementY}px`,
   }">
     <div class="card-bg"></div>
-    <slot></slot>
+    <div class="card-content">
+      <slot></slot>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -28,19 +30,31 @@ const props = defineProps({
 </script>
 <style lang="less" scoped>
 .me-card {
+  --card-br: 10px;
   position: relative;
   display: flex;
   flex-direction: column;
   position: relative;
   width: 100%;
   background-color: #202023;
-  border-radius: 16px;
-  padding: 10px;
+  border-radius: var(--card-br);
+
+  .card-content {
+    width: 100%;
+    // height: 100%;
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    border-radius: var(--card-br);
+  }
 
   &.border-gradient::before {
     width: calc(100% + 2px);
     height: calc(100% + 2px);
-    border-radius: 16px;
+
+    border-radius: var(--card-br);
     position: absolute;
     inset: -1px;
     content: '';
@@ -51,7 +65,7 @@ const props = defineProps({
   }
 
   .card-bg {
-    border-radius: 16px;
+    border-radius: var(--card-br);
     position: absolute;
     top: 0;
     left: 0;
