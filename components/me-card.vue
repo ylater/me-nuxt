@@ -41,7 +41,7 @@ const props = defineProps({
 
   .card-content {
     width: 100%;
-    // height: 100%;
+    height: 100%;
     flex: 1;
     position: relative;
     display: flex;
