@@ -118,15 +118,15 @@ getTopics()
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
   justify-content: center;
   align-items: center;
 
   h1 {
-    font-size: 6vw;
+    font-size: 80px;
     font-weight: 900;
     width: min-content;
-    margin: 12px auto;
+    // margin: 12px auto;
     text-transform: uppercase;
     background: linear-gradient(219deg,
         var(--color-1) 19%,
