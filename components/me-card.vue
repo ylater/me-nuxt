@@ -1,20 +1,18 @@
 <template>
-  <div class="me-card">
-    <div class="card-media">
-      <img :src="cover" alt="" />
-    </div>
+  <div class="me-card border-gradient" ref="card" :style="{
+    '--x': `${elementX}px`,
+    '--y': `${elementY}px`,
+  }">
+    <div class="card-bg"></div>
     <div class="card-content">
-      <slot>
-        <h3 class="title">{{ title }}</h3>
-        <p class="description">{{ description }}</p>
-        <div class="actions">
-          <slot name="actions"></slot>
-        </div>
-      </slot>
+      <slot></slot>
     </div>
   </div>
 </template>
 <script setup lang="ts">
+import { useMouseInElement } from "@vueuse/core";
+const card = ref<HTMLDivElement>();
+const { elementX, elementY } = useMouseInElement(card);
 const props = defineProps({
   cover: {
     type: String,
@@ -32,77 +30,52 @@ const props = defineProps({
 </script>
 <style lang="less" scoped>
 .me-card {
+  --card-br: 10px;
   position: relative;
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(3px);
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 2px 2px 4px rgb(0 0 0 / 25%);
-  min-width: 180px;
   position: relative;
-  transition: transform 250ms;
+  width: 100%;
+  background-color: #202023;
+  border-radius: var(--card-br);
 
-  &::before {
+  .card-content {
+    width: 100%;
+    // height: 100%;
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    border-radius: var(--card-br);
+  }
+
+  &.border-gradient::before {
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+
+    border-radius: var(--card-br);
+    position: absolute;
+    inset: -1px;
     content: '';
+    background: radial-gradient(300px circle at var(--x) var(--y),
+        #1cd1c6 0,
+        #407cff 50%,
+        transparent 100%);
+  }
+
+  .card-bg {
+    border-radius: var(--card-br);
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-    z-index: 1;
-  }
-
-  &:hover {
-    transform: translateY(-10px);
-
-    &::before {
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, .5) 100%);
-    }
-
-    .card-media {
-      img {
-        transform: scale(1.5);
-        transition: transform 250ms;
-      }
-    }
-  }
-
-  .card-media {
-    width: 100%;
-    height: 235px;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      transition: transform 250ms;
-    }
-  }
-
-  .card-content {
-    position: absolute;
-    z-index: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    color: #fff;
-
-    .title {
-      font-size: 24px;
-      font-weight: 500;
-      margin-bottom: 10px;
-    }
-
-    .description {
-      font-size: 14px;
-      color: #fff;
-      opacity: .5;
-    }
+    inset: 0;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    transition-duration: 300ms;
+    background-color: #202023;
   }
 }
 </style>

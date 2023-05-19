@@ -20,12 +20,8 @@ const appStore = useAppStore()
 //home
 const menuList = ref([
   {
-    icon: 'logos:apple',
-    text: 'Apple'
-  },
-  {
-    icon: 'logos:adobe-photoshop',
-    text: 'photoshop'
+    icon: 'mdi:badminton',
+    text: 'Badminton'
   },
   {
     icon: 'logos:visual-studio-code',

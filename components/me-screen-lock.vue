@@ -3,11 +3,18 @@
     <div class="me-screen-lock">
       <!-- lock -->
       <div class="screen-lock" v-if="visiblePin">
-        <me-pin @complete="handlePin"></me-pin>
         <p class="pin-tip">
           请输入pin:1234
-          <me-button class="btn" @click="handleVisblePin(false)">取消</me-button>
+          <me-button class="btn" @click="handleKeyboard"
+            :icon="visibleKeyboard ? 'mdi:keyboard-close-outline' : 'mdi:keyboard'">
+
+
+          </me-button>
+          <me-button class="btn" icon="mdi:keyboard-esc" @click="handleVisblePin(false)">
+          </me-button>
         </p>
+
+        <me-pin @complete="handlePin" :show-keyboard="visibleKeyboard"></me-pin>
       </div>
 
       <!-- 锁屏状态 -->
@@ -41,6 +48,11 @@ const currentDate = useDateFormat(useNow(), 'YYYY-MM-DD')
 const handleEnter = () => {
   handleVisblePin(true)
 }
+//visibleKeyboard
+const visibleKeyboard = ref(false)
+const handleKeyboard = () => {
+  visibleKeyboard.value = !visibleKeyboard.value
+}
 </script>
 <style lang="less" scoped>
 .me-screen-lock {
@@ -56,9 +68,16 @@ const handleEnter = () => {
 
     .pin-tip {
       color: #fff;
-      font-size: 14px;
+      font-size: 15px;
       letter-spacing: 1px;
       opacity: .5;
+      display: flex;
+      align-items: center;
+
+      .btn {
+        font-size: 22px;
+        margin-left: 10px;
+      }
     }
   }
 

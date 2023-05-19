@@ -14,12 +14,9 @@ export default defineNuxtConfig({
       name: 'slide',
       mode: 'out-in' // default
     },
-    // layoutTransition: {
-    //   name: 'slide',
-    //   mode: 'out-in' // default
-    // }
   },
   modules: [
+    '@nuxt/devtools',
     '@nuxt/ui',
     '@vueuse/nuxt',
     'nuxt-icon',
@@ -28,13 +25,26 @@ export default defineNuxtConfig({
     '@pinia-plugin-persistedstate/nuxt',
     // '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
+    // '@nuxtjs/i18n',
   ],
+  devtools: {
+    enabled: true,
+  },
   plugins: [
-    { src: '~/plugins/vercel.ts', mode: 'client' }
+    { src: '~/plugins/vercel.ts', mode: 'client' },
+    {
+      src: '~/plugins/arco.ts',
+    }
   ],
   pinia: {
     autoImports: ['defineStore', 'acceptHMRUpdate'],
   },
+  nitro: {
+    plugins: ["@/server/db/index.ts"],
+  },
+  // i18n: {
+  //   vueI18n: './locale/index.ts',
+  // },
   pwa: {
     manifest: {
       name: 'Me Cover',

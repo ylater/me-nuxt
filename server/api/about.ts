@@ -1,4 +1,12 @@
+import data from './cal.json'
 export default defineEventHandler(() => {
-  //about 
-
+  return {
+    data: {
+      name: 'Murphy',
+      version: '1.0.0',
+      ...data
+    },
+  }
 })
+
+
