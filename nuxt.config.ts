@@ -42,6 +42,9 @@ export default defineNuxtConfig({
   nitro: {
     plugins: ["@/server/db/index.ts"],
   },
+  css: [
+    '@/assets/style/style.less',
+  ],
   // i18n: {
   //   vueI18n: './locale/index.ts',
   // },

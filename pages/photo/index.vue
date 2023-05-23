@@ -1,26 +1,15 @@
 <template>
   <div class='photo-page'>
-    <!-- <div class="lucky-btn" @click="getCoverImage">
-      <IconCSS class="icon" name="icon-park:refresh"></IconCSS>
-    </div> -->
+    <!--  background -->
     <div class="bg">
       <div class="bg-image" :style="getBackgroundStyles"></div>
       <div class="bg-filter" :class="{ 'focus': searching }"></div>
     </div>
+    <!-- search bar  -->
     <me-search-bar v-model="keyword" @search="onPressEnter" @reset="resetSearch"></me-search-bar>
-    <!-- <div class="search-bar-aligner" :class="{ 'searching': searching }" @click="handleFocus">
-      <div class="search-bar-wrapper">
-        <div class="search-bar">
-          <div class="search-icon">
-            <IconCSS class="icon" name="ep:search"></IconCSS>
-          </div>
-          <input v-model="keyword" @blur="handleBlur" @keyup.enter="onPressEnter" ref="searchInputRef"
-            class="search-bar-input" type="text" placeholder="Search" />
-        </div>
-      </div>
-    </div> -->
-    <div class="photos" v-if="photos.length">
-      <me-observer :isLoading="isLoading" @loadMore="loadData">
+    <!-- photos -->
+    <div class="photos">
+      <me-observer :isLoading="isLoading" @loadMore="loadData" v-if="total > 0">
         <div class="photo-list">
           <div class="photo-item" v-for="(photo, index) in photos" :key="photo.id" :style="{
             //5-10随机
@@ -37,7 +26,18 @@
           </div>
         </div>
       </me-observer>
+      <!-- empty tips -->
+      <div class="empty" v-if="searching && total === 0 && !isLoading">
+        <div class="empty-icon">
+          <IconCSS class="icon" name="ep:MagicStick"></IconCSS>
+        </div>
+        <div class="empty-text">
+          No results found
+        </div>
+      </div>
     </div>
+    <Topics class="pin-bottom" v-if="!searching"></Topics>
+    <!-- preview -->
     <a-image-preview-group v-if="visibleOverlay" v-model:visible="visibleOverlay" v-model:current="current" infinite
       :srcList="photosList">
       <template #actions>
@@ -55,9 +55,9 @@
 </template>
 <script lang="ts" setup>
 import { saveAs } from 'file-saver'
+import Topics from './topics.vue'
 definePageMeta({
   key: 'photo',
-  layout: 'ylater',
 })
 const focused = ref(false)
 const searchInputRef = ref<HTMLInputElement | null | undefined>()
@@ -76,7 +76,7 @@ function getCoverImage() {
   //获取当前时间
   const timestamp = new Date().getTime()
   const params = {
-    topics: 'Jpg6Kidl-Hk',
+    topics: '6sMVjTLSkeQ',
     // timestamp: timestamp
   }
   getRandomPhotos(params).then((res) => {
@@ -92,7 +92,7 @@ const getBackgroundStyles = computed(() => {
 })
 //search
 const searching = ref(false)
-const keyword = ref('cat')
+const keyword = ref('')
 function onPressEnter() {
   if (!keyword.value) return
   searching.value = true
@@ -458,5 +458,26 @@ getCoverImage()
 
 .arco-image-preview-wrapper {
   backdrop-filter: blur(5px);
+}
+
+.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0, 0, 0, .5);
+}
+
+.pin-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  color: #fff;
+  font-size: 14px;
 }
 </style>	

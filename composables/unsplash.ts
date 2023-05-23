@@ -46,3 +46,11 @@ export async function getSearchPhotos(params: Record<string, string | number | u
 export async function getPhotoTopics(params: Record<string, string | number | undefined> = {}) {
   return await _fetch('/topics', params)
 }
+//Get a topic
+export async function getTopic(params: Record<string, string | number | undefined> = {}) {
+  return await _fetch(`/topics/${params.id}`, params)
+}
+//Get a topic’s photos
+export async function getTopicPhotos(params: Record<string, string | number | undefined> = {}) {
+  return await _fetch(`/topics/${params.id}/photos`, params)
+}

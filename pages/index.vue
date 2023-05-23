@@ -91,7 +91,6 @@
 import { useAppStore } from '@/stores'
 definePageMeta({
   key: 'index',
-  layout: 'ylater',
 })
 const topics = ref<any[]>([])
 function getTopics() {
