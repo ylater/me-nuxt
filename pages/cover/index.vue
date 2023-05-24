@@ -42,6 +42,7 @@
 import { useAppStore } from '@/stores'
 definePageMeta({
   key: 'index',
+  layout: 'ylater',
 })
 const Router = useRouter()
 const appStore = useAppStore()

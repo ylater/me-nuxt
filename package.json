@@ -19,6 +19,7 @@
     "@arco-design/web-vue": "^2.46.0",
     "@nuxt/ui": "^0.4.1",
     "@pinia/nuxt": "^0.4.7",
+    "@types/file-saver": "^2.0.5",
     "@vercel/analytics": "^0.1.11",
     "@vite-pwa/nuxt": "^0.0.7",
     "@vueuse/nuxt": "^9.13.0",
