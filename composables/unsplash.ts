@@ -54,3 +54,15 @@ export async function getTopic(params: Record<string, string | number | undefine
 export async function getTopicPhotos(params: Record<string, string | number | undefined> = {}) {
   return await _fetch(`/topics/${params.id}/photos`, params)
 }
+
+//collections
+export async function getCollections(params: Record<string, string | number | undefined> = {}) {
+  return await _fetch(`/collections`, params)
+}
+//Get a collection
+export async function getCollectionDetail(params: Record<string, string | number | undefined> = {}) {
+  return await _fetch(`/collections/${params.id}`, params)
+}
+export async function getCollectionsPhotos(params: Record<string, string | number | undefined> = {}) {
+  return await _fetch(`/collections/${params.id}/photos`, params)
+}

@@ -15,7 +15,6 @@ const router = useRouter()
 const topics = ref<any[]>([])
 function getTopics() {
   getPhotoTopics({ per_page: 100 }).then(res => {
-    console.log(res)
     topics.value = res
   }).catch(err => {
     console.log(err)
@@ -24,10 +23,7 @@ function getTopics() {
 getTopics()
 function handleTopic(item: any) {
   router.push({
-    path: '/photo/album',
-    query: {
-      id: item.id
-    }
+    path: '/photo/album/' + item.id
   })
 }
 </script>	

@@ -109,7 +109,8 @@ const params = computed(() => {
   return {
     query: keyword.value,
     page: page.value,
-    per_page: per_page.value
+    per_page: per_page.value,
+    lang: 'zh-Hans',
   }
 })
 const photos = ref<any>([])

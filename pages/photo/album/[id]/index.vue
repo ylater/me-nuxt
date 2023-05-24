@@ -3,10 +3,9 @@
     <me-observer :isLoading="isLoading" @loadMore="loadData" v-if="total > 0">
       <div class="album-containter">
         <div class="album-info">
-
           <h1>{{ topic.title }}</h1>
           <p>{{ topic.description }}</p>
-          <a-space size="large">
+          <a-space size="large" style="margin-top: 36px;">
             <a-statistic animation title="Total Photos :" :value="topic.total_photos" show-group-separator />
             <!-- Total Photos: {{ topic.total_photos }} -->
           </a-space>
@@ -35,8 +34,9 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { saveAs } from 'file-saver'
 const route = useRoute()
-const { id } = route.query
+const id = route.params.id as string
 const topic = ref<any>({})
 function getTopicDetail() {
   getTopic({ id }).then(res => {
@@ -45,7 +45,6 @@ function getTopicDetail() {
   })
 }
 getTopicDetail()
-
 //photo
 const isLoading = ref(false)
 const page = ref(1)
