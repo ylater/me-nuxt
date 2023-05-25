@@ -1,20 +1,42 @@
 <template>
-  <div class='photo-page'>
+  <div class="photo-page">
     <!--  background -->
     <div class="bg">
       <div class="bg-image" :style="getBackgroundStyles"></div>
-      <div class="bg-filter" :class="{ 'focus': searching }"></div>
+      <div class="bg-filter" :class="{ focus: searching }"></div>
     </div>
+    <!--  header -->
+    <!-- <div class="switch-tab">
+      <div class="tab">
+        <icon name="ep:search"></icon>
+      </div>
+      <div class="tab">
+        <icon name="ep:picture"></icon>
+      </div>
+      <div class="tab">
+        <icon name="ep:picture"></icon>
+      </div>
+    </div> -->
     <!-- search bar  -->
-    <me-search-bar v-model="keyword" @search="onPressEnter" @reset="resetSearch"></me-search-bar>
+    <me-search-bar
+      v-model="keyword"
+      @search="onPressEnter"
+      @reset="resetSearch"
+    ></me-search-bar>
     <!-- photos -->
     <div class="photos">
       <me-observer :isLoading="isLoading" @loadMore="loadData" v-if="total > 0">
         <div class="photo-list">
-          <div class="photo-item" v-for="(photo, index) in photos" :key="photo.id" :style="{
-            //5-10随机
-            gridRowEnd: photo.gridRowEnd,
-          }" @click="handleDetail(photo, index)">
+          <div
+            class="photo-item"
+            v-for="(photo, index) in photos"
+            :key="photo.id"
+            :style="{
+              //5-10随机
+              gridRowEnd: photo.gridRowEnd,
+            }"
+            @click="handleDetail(photo, index)"
+          >
             <div class="photo-image visible">
               <img :src="photo.urls?.regular" alt="" />
             </div>
@@ -31,21 +53,28 @@
         <div class="empty-icon">
           <IconCSS class="icon" name="ep:MagicStick"></IconCSS>
         </div>
-        <div class="empty-text">
-          No results found
-        </div>
+        <div class="empty-text">No results found</div>
       </div>
     </div>
     <Topics class="pin-bottom" v-if="!searching"></Topics>
     <!-- preview -->
-    <a-image-preview-group v-if="visibleOverlay" v-model:visible="visibleOverlay" v-model:current="current" infinite
-      :srcList="photosList">
+    <a-image-preview-group
+      v-if="visibleOverlay"
+      v-model:visible="visibleOverlay"
+      v-model:current="current"
+      infinite
+      :srcList="photosList"
+    >
       <template #actions>
         <div class="arco-image-preview-toolbar-action" @click="downloadImage">
           <a-tooltip content="原图下载">
             <a-spin v-if="downloading" />
             <span v-else class="arco-image-preview-toolbar-action-content">
-              <Icon style="display: flex;" name="icon-park:download" size="14"></Icon>
+              <Icon
+                style="display: flex"
+                name="icon-park:download"
+                size="14"
+              ></Icon>
             </span>
           </a-tooltip>
         </div>
@@ -54,137 +83,138 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { saveAs } from 'file-saver'
-import Topics from './topics.vue'
+import { saveAs } from "file-saver";
+import Topics from "./topics.vue";
 definePageMeta({
-  key: 'photo',
-})
-const focused = ref(false)
-const searchInputRef = ref<HTMLInputElement | null | undefined>()
+  key: "photo",
+  title: "Photo",
+});
+const focused = ref(false);
+const searchInputRef = ref<HTMLInputElement | null | undefined>();
 const handleFocus = () => {
-  focused.value = true
+  focused.value = true;
   // @ts-ignore
-  searchInputRef.value.focus()
-}
+  searchInputRef.value.focus();
+};
 const handleBlur = () => {
-  if (searching.value) focused.value = true
-  focused.value = false
-}
+  if (searching.value) focused.value = true;
+  focused.value = false;
+};
 //cover
-const cover = ref<any>({})
+const cover = ref<any>({});
 function getCoverImage() {
   //获取当前时间
-  const timestamp = new Date().getTime()
+  const timestamp = new Date().getTime();
   const params = {
-    topics: '6sMVjTLSkeQ',
+    topics: "6sMVjTLSkeQ",
     // timestamp: timestamp
-  }
+  };
   getRandomPhotos(params).then((res) => {
-    cover.value = res
-    console.log(res)
-  })
+    cover.value = res;
+    console.log(res);
+  });
 }
 const getBackgroundStyles = computed(() => {
   return {
-    'background-image': `url(${cover.value.urls?.regular})`,
-    'background-color': cover.value.color,
-  }
-})
+    "background-image": `url(${cover.value.urls?.full})`,
+    "background-color": cover.value.color,
+  };
+});
 //search
-const searching = ref(false)
-const keyword = ref('')
+const searching = ref(false);
+const keyword = ref("");
 function onPressEnter() {
-  if (!keyword.value) return
-  searching.value = true
-  focused.value = true
-  page.value = 1
-  photos.value = []
-  getPhotos()
+  if (!keyword.value) return;
+  searching.value = true;
+  focused.value = true;
+  page.value = 1;
+  photos.value = [];
+  getPhotos();
 }
 //photo list
-const page = ref(1)
-const per_page = ref(20)
-const total = ref(0)
+const page = ref(1);
+const per_page = ref(20);
+const total = ref(0);
 const params = computed(() => {
   return {
     query: keyword.value,
     page: page.value,
     per_page: per_page.value,
-    lang: 'zh-Hans',
-  }
-})
-const photos = ref<any>([])
-const isLoading = ref(false)
+    lang: "zh-Hans",
+  };
+});
+const photos = ref<any>([]);
+const isLoading = ref(false);
 const getPhotos = () => {
-  isLoading.value = true
-  getSearchPhotos(params.value).then((res) => {
-    const list = res.results.map((v: any) => {
-      return {
-        ...v,
-        gridRowEnd: gridRowEnd()
-      }
+  isLoading.value = true;
+  getSearchPhotos(params.value)
+    .then((res) => {
+      const list = res.results.map((v: any) => {
+        return {
+          ...v,
+          gridRowEnd: gridRowEnd(),
+        };
+      });
+      photos.value = [...photos.value, ...list];
+      total.value = res.total;
     })
-    photos.value = [...photos.value, ...list]
-    total.value = res.total
-  }).finally(() => {
-    isLoading.value = false
-  })
-}
-
+    .finally(() => {
+      isLoading.value = false;
+    });
+};
 
 const loadData = () => {
-  if (photos.value.length >= total.value) return
-  page.value++
-  getPhotos()
-}
+  if (photos.value.length >= total.value) return;
+  page.value++;
+  getPhotos();
+};
 const gridRowEnd = () => {
   //5-10随机
-  const rowEnd = Math.floor(Math.random() * (10 - 5 + 1) + 5)
-  console.log(rowEnd)
-  return `span ${rowEnd}`
-}
-const setVisible = () => {
-}
+  const rowEnd = Math.floor(Math.random() * (10 - 5 + 1) + 5);
+  console.log(rowEnd);
+  return `span ${rowEnd}`;
+};
+const setVisible = () => {};
 //detail
-const photo = ref<any>({})
-const visibleOverlay = ref(false)
-const current = ref(0)
+const photo = ref<any>({});
+const visibleOverlay = ref(false);
+const current = ref(0);
 const photosList = computed(() => {
   return photos.value.map((v: any) => {
-    return v.urls?.regular
-  })
-})
+    return v.urls?.regular;
+  });
+});
 function handleDetail(item: any, index: number) {
-  photo.value = { ...item }
-  current.value = index
-  visibleOverlay.value = true
+  photo.value = { ...item };
+  current.value = index;
+  visibleOverlay.value = true;
 }
 function close() {
-  visibleOverlay.value = false
+  visibleOverlay.value = false;
 }
 //download
 const downloadUrl = computed(() => {
-  return photos.value[current.value].urls?.full + '?force=true'
-})
-const downloading = ref(false)
+  return photos.value[current.value].urls?.full + "?force=true";
+});
+const downloading = ref(false);
 const downloadImage = () => {
-  downloading.value = true
-  saveAs(downloadUrl.value, photos.value[current.value].id)
-  downloading.value = false
-}
+  downloading.value = true;
+  saveAs(downloadUrl.value, photos.value[current.value].id);
+  downloading.value = false;
+};
 //reset
 const resetSearch = () => {
-  searching.value = false
-  focused.value = false
-  page.value = 1
-  photos.value = []
-  total.value = 0
-}
+  searching.value = false;
+  focused.value = false;
+  page.value = 1;
+  photos.value = [];
+  total.value = 0;
+};
 //init
 
-getCoverImage()
+getCoverImage();
 // onPressEnter()
-</script>	
+</script>
 <style lang="less" scoped>
 @blue: #07101d;
 @yellow: #ffdc25;
@@ -218,9 +248,7 @@ getCoverImage()
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  opacity: .4;
-
-
+  opacity: 0.4;
 
   .bg-image {
     position: fixed;
@@ -255,109 +283,6 @@ getCoverImage()
   }
 }
 
-.search-bar-aligner {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  height: 100%;
-  pointer-events: none;
-  position: fixed;
-  transition: height 250ms;
-  width: 100%;
-  overflow: hidden;
-  z-index: 3;
-  cursor: pointer;
-
-  .search-bar-wrapper {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin: 10px;
-    width: 500px;
-    overflow: hidden;
-
-    .search-bar {
-      align-items: center;
-      backdrop-filter: blur(5px);
-      background-color: rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
-      box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      padding: 10px;
-      pointer-events: all;
-      position: relative;
-      // width: calc(100% - 20px);
-      width: 100%;
-      overflow: hidden;
-
-
-
-      .search-icon {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        color: white;
-        font-size: 18px;
-        margin-right: 10px;
-
-        &::after {
-          content: '';
-          position: absolute;
-          width: 1px;
-          height: 100%;
-          right: -10px;
-          border-radius: 2px;
-          transform: all 250ms;
-          background-color: rgba(255, 255, 255, 1);
-          transition: width 250ms, height 250ms;
-        }
-      }
-
-      .search-bar-input {
-        background-color: transparent;
-        border: none;
-        color: white;
-        font-size: 1em;
-        height: 40px;
-        outline: none;
-        padding: 10px 0px;
-        text-align: left;
-        transition: width 250ms;
-        width: 100%;
-        font-size: 16px;
-        font-weight: bold;
-        overflow: hidden;
-
-        &::placeholder {
-          font-weight: 500;
-          font-size: 15px;
-          color: rgba(255, 255, 255, 1);
-        }
-
-        &:focus {
-          flex: 1;
-
-          &::placeholder {
-            color: rgba(255, 255, 255, 0.2);
-
-          }
-        }
-      }
-    }
-  }
-
-  &.searching {
-    height: 100px;
-  }
-
-
-}
-
 .photos {
   flex: 1;
   overflow: hidden;
@@ -379,7 +304,8 @@ getCoverImage()
     .photo-item {
       background-color: #1e1e1e;
       border-radius: 10px;
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+        rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
       // opacity: 0;
       overflow: hidden;
       position: relative;
@@ -395,17 +321,17 @@ getCoverImage()
         width: 100%;
         height: 100%;
         opacity: 0;
-        transition: all .2s ease-in-out;
+        transition: all 0.2s ease-in-out;
         filter: blur(3px);
 
         &.visible {
           opacity: 1;
-          transition: all .2s ease-in-out;
+          transition: all 0.2s ease-in-out;
           filter: blur(0);
 
           img {
             transform: scale(1);
-            transition: all .2s ease-in-out;
+            transition: all 0.2s ease-in-out;
           }
         }
 
@@ -414,7 +340,7 @@ getCoverImage()
           height: 100%;
           object-fit: cover;
           transform: scale(1.2);
-          transition: all .2s ease-in-out;
+          transition: all 0.2s ease-in-out;
         }
       }
 
@@ -430,7 +356,7 @@ getCoverImage()
         left: 0;
         width: 100%;
         padding: 10px;
-        background-color: rgba(0, 0, 0, .5);
+        background-color: rgba(0, 0, 0, 0.5);
         color: #fff;
         font-size: 14px;
 
@@ -469,7 +395,7 @@ getCoverImage()
   color: #fff;
   text-transform: uppercase;
   letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(0, 0, 0, .5);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .pin-bottom {
@@ -481,4 +407,36 @@ getCoverImage()
   color: #fff;
   font-size: 14px;
 }
-</style>	
+
+.switch-tab {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 10px;
+  margin-top: 20px;
+  width: 100%;
+  overflow: hidden;
+  z-index: 2;
+  width: 180px;
+  margin: 0 auto;
+  border-radius: 60px;
+
+  .tab {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &.active {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+</style>

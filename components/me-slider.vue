@@ -1,8 +1,12 @@
 <template>
-  <div class='me-slider' ref="meSlider">
-    <div ref="leftRef" class="side left-side" :style="{
-      width: elementX + 'px',
-    }">
+  <div class="me-slider" ref="meSlider">
+    <div
+      ref="leftRef"
+      class="side left-side"
+      :style="{
+        width: elementX + 'px',
+      }"
+    >
       <h2 class="title">
         {{ title }}
       </h2>
@@ -12,7 +16,6 @@
         {{ title }}
       </h2>
     </div>
-
   </div>
 </template>
 <script lang="ts" setup>
@@ -20,13 +23,9 @@ import { useMouseInElement } from "@vueuse/core";
 const leftRef = ref<HTMLDivElement>();
 const meSlider = ref<HTMLDivElement>();
 const { elementX, elementY, isOutside } = useMouseInElement(meSlider);
-const title = ref('comming soon')
-watch(isOutside, (v) => {
-
-})
-
-
-</script>	
+const title = ref("comming soon");
+watch(isOutside, (v) => {});
+</script>
 <style lang="less" scoped>
 .me-slider {
   position: relative;
@@ -43,7 +42,6 @@ watch(isOutside, (v) => {
   overflow: hidden;
 }
 
-
 .side {
   display: grid;
   height: 100%;
@@ -52,8 +50,10 @@ watch(isOutside, (v) => {
   place-items: center;
   position: absolute;
   padding: 2vw;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px,
-      transparent 1px);
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.1) 1px,
+    transparent 1px
+  );
   background-position: 50% 50%;
   background-size: 1.1rem 1.1rem;
 
@@ -71,6 +71,5 @@ watch(isOutside, (v) => {
       color: white;
     }
   }
-
 }
-</style>	
+</style>

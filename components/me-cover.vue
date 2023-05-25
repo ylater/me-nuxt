@@ -10,8 +10,7 @@
 <script lang="ts" setup>
 import { useAppStore } from '@/stores/index'
 const appStore = useAppStore()
-const videoUrl = computed(() => appStore.video)
-console.log('text', videoUrl.value)
+const videoUrl = computed(() => appStore.video) 
 if (!videoUrl.value) {
   appStore.setBgVideo('https://cdn.coverr.co/videos/coverr-cinematic-snowy-mountains-7615/1080p.mp4')
 }
