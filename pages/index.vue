@@ -1,5 +1,5 @@
 <template>
-  <div class='home-page'>
+  <div class="home-page">
     <me-particles></me-particles>
     <div class="album">
       <section class="section">
@@ -10,29 +10,40 @@
           </div>
         </me-card>
         <me-card class="card">
-          <div class="topics-box ">
+          <div class="topics-box">
             <div class="topics">
-              <div class="topic" v-for="item in topics">
+              <div class="topic" v-for="item in topics" :key="item.id">
                 <div class="topic-cover">
-                  <img :src="item.cover_photo.urls.small" alt="">
+                  <img :src="item.cover_photo.urls.small" alt="" />
                 </div>
                 <div class="topic-title">{{ item.title }}</div>
               </div>
-
+              <div class="topic" v-for="item in topics" :key="item.id">
+                <div class="topic-cover">
+                  <img :src="item.cover_photo.urls.small" alt="" />
+                </div>
+                <div class="topic-title">{{ item.title }}</div>
+              </div>
             </div>
           </div>
           <div class="card-info">
             <div>
               <h2 class="card-title">图片搜索</h2>
               <p class="card-text">海量无版权可商用的高清图片</p>
-            </div> <router-link to="/photo">
+            </div>
+            <router-link to="/photo">
               <a-button type="outline" shape="circle">
-                <icon name="ep:arrow-right" color="#fff"></icon>
-              </a-button></router-link>
+                <icon name="ep:arrow-right" color="#fff"></icon> </a-button
+            ></router-link>
           </div>
         </me-card>
         <me-card class="card">
-          <me-cover class="bg-cover" style="width:100%;height: 100%;border-radius:16px" autoplay></me-cover>
+          <div class="card-mask"></div>
+          <me-cover
+            class="bg-cover"
+            style="width: 100%; height: 100%; border-radius: 16px"
+            autoplay
+          ></me-cover>
           <div class="card-info">
             <div>
               <h2 class="card-title">背景视频</h2>
@@ -48,7 +59,6 @@
         <me-card class="card">
           <div class="user-card">
             <div class="user-profile">
-
               <div class="user-avatar">
                 <img src="@/assets/avatar.png" />
               </div>
@@ -70,7 +80,6 @@
                 <a>
                   <icon name="bxl:telegram"></icon>
                 </a>
-
               </div>
             </div>
           </div>
@@ -88,21 +97,24 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { useAppStore } from '@/stores'
+import { useAppStore } from "@/stores";
 definePageMeta({
-  key: 'index',
-})
-const topics = ref<any[]>([])
+  key: "index",
+  layout: "home",
+});
+const topics = ref<any[]>([]);
 function getTopics() {
-  getPhotoTopics({ per_page: 100 }).then(res => {
-    console.log(res)
-    topics.value = res
-  }).catch(err => {
-    console.log(err)
-  })
+  getPhotoTopics({ per_page: 100 })
+    .then((res) => {
+      console.log(res);
+      topics.value = res;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
-getTopics()
-</script>	
+getTopics();
+</script>
 <style lang="less" scoped>
 .home-page {
   --color-1: #186cb8;
@@ -127,43 +139,58 @@ getTopics()
     width: min-content;
     // margin: 12px auto;
     text-transform: uppercase;
-    background: linear-gradient(219deg,
-        var(--color-1) 19%,
-        transparent 19%, transparent 20%,
-        var(--color-2) 20%, var(--color-2) 39%,
-        transparent 39%, transparent 40%,
-        var(--color-3) 40%, var(--color-3) 59%,
-        transparent 59%, transparent 60%,
-        var(--color-4) 60%, var(--color-4) 79%,
-        transparent 79%, transparent 80%,
-        var(--color-5) 80%);
+    background: linear-gradient(
+      219deg,
+      var(--color-1) 19%,
+      transparent 19%,
+      transparent 20%,
+      var(--color-2) 20%,
+      var(--color-2) 39%,
+      transparent 39%,
+      transparent 40%,
+      var(--color-3) 40%,
+      var(--color-3) 59%,
+      transparent 59%,
+      transparent 60%,
+      var(--color-4) 60%,
+      var(--color-4) 79%,
+      transparent 79%,
+      transparent 80%,
+      var(--color-5) 80%
+    );
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
 
-    &+p {
+    & + p {
       font-weight: 500;
       color: #fff;
       text-align: center;
-      background: linear-gradient(219deg,
-          var(--color-1) 19%,
-          transparent 19%, transparent 20%,
-          var(--color-2) 20%, var(--color-2) 39%,
-          transparent 39%, transparent 40%,
-          var(--color-3) 40%, var(--color-3) 59%,
-          transparent 59%, transparent 60%,
-          var(--color-4) 60%, var(--color-4) 79%,
-          transparent 79%, transparent 80%,
-          var(--color-5) 80%);
+      background: linear-gradient(
+        219deg,
+        var(--color-1) 19%,
+        transparent 19%,
+        transparent 20%,
+        var(--color-2) 20%,
+        var(--color-2) 39%,
+        transparent 39%,
+        transparent 40%,
+        var(--color-3) 40%,
+        var(--color-3) 59%,
+        transparent 59%,
+        transparent 60%,
+        var(--color-4) 60%,
+        var(--color-4) 79%,
+        transparent 79%,
+        transparent 80%,
+        var(--color-5) 80%
+      );
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
     }
   }
 }
-
-
-
 
 .square {
   position: relative;
@@ -181,7 +208,7 @@ getTopics()
     left: 10%;
     width: 80%;
     height: 80%;
-    border: rgba(255, 255, 255, .1) 2px solid;
+    border: rgba(255, 255, 255, 0.1) 2px solid;
     transition: 0.5s;
 
     &:nth-child(1) {
@@ -203,14 +230,10 @@ getTopics()
   &:hover {
     span {
       border: none;
-      background: rgba(255, 255, 255, .01);
+      background: rgba(255, 255, 255, 0.01);
     }
   }
-
 }
-
-
-
 
 @keyframes animate {
   0% {
@@ -240,7 +263,7 @@ getTopics()
 }
 
 .mQ($px) {
-  @media screen and (max-width:$px) {
+  @media screen and (max-width: $px) {
     @content();
   }
 }
@@ -292,6 +315,23 @@ getTopics()
     //   z-index: 1;
     // }
 
+    .card-mask {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        0deg,
+        #202023,
+        transparent 50%,
+        transparent 100%,
+        #202023
+      );
+      z-index: 1;
+    }
+
     // overflow: hidden;
     .card-info {
       width: 100%;
@@ -320,7 +360,6 @@ getTopics()
         border-color: #fff;
         color: #fff;
       }
-
     }
 
     .mQ(470px) {
@@ -354,14 +393,13 @@ getTopics()
     }
 
     .mQ(470px) {
-
       &:nth-child(5) {
         grid-column: span 2;
       }
     }
 
     p {
-      font-size: clamp(0.9rem, 0.8750rem + 0.1250vw, 1rem);
+      font-size: clamp(0.9rem, 0.875rem + 0.125vw, 1rem);
       line-height: 1.4;
     }
   }
@@ -372,20 +410,24 @@ getTopics()
   height: 100%;
   flex: 1;
   overflow: hidden;
+  padding: 12px;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: 1;
-    background: linear-gradient(180deg,
-        #202023, transparent 10%, transparent 80%,
-        #202023);
+    background: linear-gradient(
+      180deg,
+      #202023,
+      transparent 10%,
+      transparent 80%,
+      #202023
+    );
   }
-
 }
 
 .topics {
@@ -397,7 +439,7 @@ getTopics()
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 10px;
   animation: loop 100s linear infinite normal;
-
+  opacity: 0.8;
   @keyframes loop {
     0% {
       transform: translateX(0);
@@ -407,8 +449,6 @@ getTopics()
       transform: translateY(-50%);
     }
   }
-
-
 
   .topic {
     position: relative;
@@ -423,21 +463,19 @@ getTopics()
     z-index: 2;
     grid-row-end: span 3;
 
-    &:nth-child(2n+1) {
+    &:nth-child(2n + 1) {
       grid-row-end: span 8;
     }
 
-
-
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
       height: 30%;
       // background-color: rgba(0, 0, 0, .5);
-      background-image: linear-gradient(transparent, rgba(0, 0, 0, .5));
+      background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
       z-index: 1;
     }
 
@@ -465,10 +503,8 @@ getTopics()
       z-index: 2;
       font-size: 1.5rem;
       font-weight: 700;
-
     }
   }
-
 }
 
 .user-card {
@@ -483,7 +519,6 @@ getTopics()
   background: linear-gradient(45deg, #102eff, #d2379b);
   border-radius: 12px;
   overflow: hidden;
-
 }
 
 .user-profile {
@@ -494,7 +529,7 @@ getTopics()
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, .1);
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   box-shadow: 0px 8px 60px -10px rgba(13, 28, 39, 0.6);
   padding-bottom: 30px;
@@ -505,7 +540,8 @@ getTopics()
     border-radius: 50%;
     transform: translateY(-50%);
     overflow: hidden;
-    box-shadow: 0px 5px 50px 0px #6c44fc, 0px 0px 0px 7px rgba(107, 74, 255, 0.5);
+    box-shadow: 0px 5px 50px 0px #6c44fc,
+      0px 0px 0px 7px rgba(107, 74, 255, 0.5);
 
     img {
       width: 100%;
@@ -532,10 +568,9 @@ getTopics()
       // color: #324e63;
       font-size: 13px;
       margin-bottom: 8px;
-      opacity: .8;
+      opacity: 0.8;
       letter-spacing: 1px;
     }
-
   }
 }
 
@@ -551,15 +586,15 @@ getTopics()
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: rgba(255, 255, 255, .01);
+    background: rgba(255, 255, 255, 0.01);
     backdrop-filter: blur(10px);
     margin: 0 5px;
-    transition: all .3s ease-in-out;
+    transition: all 0.3s ease-in-out;
     font-size: 20px;
     color: #fff;
 
     &:hover {
-      background: rgba(255, 255, 255, .2);
+      background: rgba(255, 255, 255, 0.2);
     }
   }
 }
@@ -578,4 +613,4 @@ getTopics()
     object-fit: cover;
   }
 }
-</style>	
+</style>

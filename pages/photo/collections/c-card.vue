@@ -2,24 +2,38 @@
   <div class="main-card">
     <div class="card-content">
       <div class="content-left">
-        <img class="full-img" :src="cover" :alt="item.cover_photo.alt_description">
+        <img
+          class="full-img"
+          :src="cover"
+          :alt="item.cover_photo.alt_description"
+        />
       </div>
       <div class="content-right">
-        <h2> {{ item.title }}</h2>
+        <h2>{{ item.title }}</h2>
         <div>
-          <p>{{ item.total_photos }} photos · Curated by <a>
+          <p>
+            {{ item.total_photos }} photos · Curated by
+            <a>
               {{ item.user.first_name }}
-            </a> Collections</p>
+            </a>
+            Collections
+          </p>
         </div>
         <div class="tags">
           <template v-for="(tag, ti) in item.tags">
-            <a-tag class="tag" bordered v-if="'search' === tag.type">{{ tag.title }}</a-tag>
+            <a-tag class="tag" bordered v-if="'search' === tag.type">{{
+              tag.title
+            }}</a-tag>
           </template>
         </div>
         <div class="mini-imgs">
-          <picture v-for="(photo, pi) in item.preview_photos " :key="pi" @click="changeCover(photo)">
-            <source :srcset="photo.urls.small" media="(min-width: 700px)">
-            <img :key="pi" :src="photo.urls.small" alt="">
+          <picture
+            v-for="(photo, pi) in item.preview_photos"
+            :key="pi"
+            @click="changeCover(photo)"
+          >
+            <source :srcset="photo.urls.small" media="(min-width: 700px)" />
+            <img :key="pi" :src="photo.urls.small" alt="" />
           </picture>
         </div>
       </div>
@@ -31,14 +45,14 @@
 const props = defineProps({
   item: {
     type: Object as PropType<any>,
-    default: () => { }
-  }
-})
-const cover = ref(props.item.cover_photo.urls.regular)
+    default: () => {},
+  },
+});
+const cover = ref(props.item.cover_photo.urls.regular);
 const changeCover = (photo: any) => {
-  cover.value = photo.urls.regular
-}
-</script>	
+  cover.value = photo.urls.regular;
+};
+</script>
 <style lang="less" scoped>
 .main-card {
   position: relative;
@@ -50,19 +64,22 @@ const changeCover = (photo: any) => {
   font-size: 1em;
   line-height: 1.5;
   color: #303336;
-  background-color: #fff;
+  cursor: pointer;
+  background: linear-gradient(33deg, #121317, #323b42);
+  box-shadow: 0 5px 10px #0002;
 
   h2 {
     margin-top: 20px;
     font-size: 3em;
     font-weight: 700;
     line-height: 1;
+    color: #fff;
   }
 
   p {
     margin-top: 20px;
     font-size: 1em;
-    color: #7B8591;
+    color: #7b8591;
   }
 
   .card-content {
@@ -126,7 +143,7 @@ const changeCover = (photo: any) => {
       transition: 300ms;
 
       &:hover {
-        opacity: .75;
+        opacity: 0.75;
       }
 
       &:nth-child(2) {
@@ -205,4 +222,4 @@ const changeCover = (photo: any) => {
     }
   }
 }
-</style>	
+</style>

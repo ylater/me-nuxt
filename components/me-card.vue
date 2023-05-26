@@ -37,7 +37,7 @@ const props = defineProps({
   position: relative;
   width: 100%;
   background-color: #202023;
-  border-radius: var(--card-br);
+  border-radius: var(--card-br); 
 
   .card-content {
     width: 100%;
@@ -48,6 +48,7 @@ const props = defineProps({
     flex-direction: column;
     z-index: 1;
     border-radius: var(--card-br);
+    overflow: hidden;
   }
 
   &.border-gradient::before {

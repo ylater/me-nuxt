@@ -50,18 +50,18 @@ function createParticles(width: number, height: number) {
 function initParticles() {
   const canvas = canvasRef.value;
   if (!canvas) return;
-
-  const ctx = canvas.getContext('2d');
+  
+  const ctx = canvas.getContext('2d')!;
   if (!ctx) return;
 
   const width = canvas.width = window.innerWidth;
   const height = canvas.height = window.innerHeight;
   const particles = createParticles(width, height);
 
-  function animate() {
+  function animate() { 
     ctx.clearRect(0, 0, width, height);
-    particles.forEach((p) => {
-      p.update(ctx, width, height);
+    particles.forEach((p) => { 
+      p.update(ctx, width, height); 
       p.draw(ctx);
     });
     requestAnimationFrame(animate);

@@ -1,51 +1,55 @@
 <template>
   <div class="me-root">
+    <me-header></me-header>
     <!-- bg -->
-    <me-cover class="bg-cover" :class="{ 'locked': visiblePin }" autoplay></me-cover>
+    <me-cover
+      class="bg-cover"
+      :class="{ locked: visiblePin }"
+      autoplay
+    ></me-cover>
     <!-- screen lock -->
     <me-screen-lock v-if="!unlocked"></me-screen-lock>
     <!-- containter -->
     <div class="me-containter" v-if="unlocked">
-      <me-app-bar></me-app-bar>
+      <!-- <me-app-bar></me-app-bar> -->
       <div class="me-main">
         <slot></slot>
       </div>
-      <me-nav-bar></me-nav-bar>
+      <!-- <me-nav-bar></me-nav-bar> -->
     </div>
   </div>
 </template>
-<script lang="ts" setup >
-import { useNow, useDateFormat } from '@vueuse/core'
-import { useAppStore } from '@/stores/index'
-const appStore = useAppStore()
-const poster = ref('')
+<script lang="ts" setup>
+import { useNow, useDateFormat } from "@vueuse/core";
+import { useAppStore } from "@/stores/index";
+const appStore = useAppStore();
+const poster = ref("");
 //screen lock
-const unlocked = computed(() => appStore.unlocked)
-const visiblePin = computed(() => appStore.visiblePin)
+const unlocked = computed(() => appStore.unlocked);
+const visiblePin = computed(() => appStore.visiblePin);
 //home
 const menuList = ref([
   {
-    icon: 'logos:apple',
-    text: 'Apple'
+    icon: "logos:apple",
+    text: "Apple",
   },
   {
-    icon: 'logos:adobe-photoshop',
-    text: 'photoshop'
+    icon: "logos:adobe-photoshop",
+    text: "photoshop",
   },
   {
-    icon: 'logos:visual-studio-code',
-    text: 'Vscode'
+    icon: "logos:visual-studio-code",
+    text: "Vscode",
   },
   {
-    icon: 'logos:vue',
-    text: 'Vue'
+    icon: "logos:vue",
+    text: "Vue",
   },
   {
-    icon: 'logos:nuxt-icon',
-    text: 'Nuxt'
-  }
-])
-
+    icon: "logos:nuxt-icon",
+    text: "Nuxt",
+  },
+]);
 </script>
 <style lang="less" scoped>
 .me-root {
@@ -133,7 +137,7 @@ const menuList = ref([
     color: #fff;
     font-size: 14px;
     letter-spacing: 1px;
-    opacity: .5;
+    opacity: 0.5;
   }
 }
 
@@ -220,9 +224,7 @@ const menuList = ref([
   //空心
   -webkit-text-stroke: 1px rgba(255, 255, 255, 1);
   -webkit-text-fill-color: transparent;
-
 }
-
 
 .nav-bar {
   position: fixed;
@@ -234,7 +236,6 @@ const menuList = ref([
   align-items: center;
   justify-content: center;
 }
-
 
 .menu-bar {
   position: fixed;
@@ -290,7 +291,7 @@ const menuList = ref([
       .menu-bar-item-text {
         font-size: 12px;
         // color: #fff;
-        opacity: .5;
+        opacity: 0.5;
       }
     }
   }
@@ -309,7 +310,6 @@ const menuList = ref([
   &:hover {
     opacity: 1;
     transition: all 0.3s ease;
-
   }
 }
 

@@ -1,7 +1,12 @@
 <template>
   <div class="preview-page">
     <!-- <me-button class="back-btn" size="small" @click="handleBack" icon="ep:close"></me-button> -->
-    <div class="info-btn" :class="{ 'fadeIn': visibleInfo }" v-if="visibleInfo" @click="handleMini">
+    <div
+      class="info-btn"
+      :class="{ fadeIn: visibleInfo }"
+      v-if="visibleInfo"
+      @click="handleMini"
+    >
       <div class="show-bar"></div>
     </div>
 
@@ -28,55 +33,66 @@
           <IconCSS class="icon" name="ep:clock"></IconCSS>
           {{ videoObj.duration }}
         </div>
-
       </div>
       <div class="actions">
-        <me-button @click="handleDownload" icon="ep:download" size="large">Download</me-button>
+        <me-button @click="handleDownload" icon="ep:download" size="large"
+          >Download</me-button
+        >
       </div>
-      <div class="source">Video Source Api： <a href="https://coverr.co" target="_blank">https://coverr.co</a></div>
+      <div class="source">
+        Video Source Api：
+        <a href="https://coverr.co" target="_blank">https://coverr.co</a>
+      </div>
     </div>
     <div class="banner-text" v-if="!visibleInfo">
       <h1 class="title">Video Preview</h1>
       <div class="description">
-        <p>Video preview is a feature that allows you to preview the video before downloading it.</p>
-        <p>It is a great way to check the quality of the video before downloading it.</p>
+        <p>
+          Video preview is a feature that allows you to preview the video before
+          downloading it.
+        </p>
+        <p>
+          It is a great way to check the quality of the video before downloading
+          it.
+        </p>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { downloadFile } from '@/utils'
+import { downloadFile } from "@/utils";
 definePageMeta({
-  key: 'preview',
+  key: "preview",
   keepalive: false,
-})
-const Router = useRouter()
-const Route = useRoute()
-const videoObj = ref<any>({})
-const loading = ref(false)
+  layout: "ylater",
+});
+const Router = useRouter();
+const Route = useRoute();
+const videoObj = ref<any>({});
+const loading = ref(false);
 const getDetail = async () => {
-  const videoId = Route.query.id as string
-  loading.value = true
-  const data = await getVideo(videoId)
-  loading.value = false
-  videoObj.value = data
-}
-getDetail()
+  const videoId = Route.query.id as string;
+  loading.value = true;
+  const data = await getVideo(videoId);
+  loading.value = false;
+  videoObj.value = data;
+};
+getDetail();
 const handleBack = () => {
-  Router.go(-1)
-}
+  Router.go(-1);
+};
 const handleDownload = () => {
   // window.open(videoObj.value.urls.mp4)
-  downloadFile(videoObj.value.urls.mp4_download, videoObj.value.title)
-}
+  downloadFile(videoObj.value.urls.mp4_download, videoObj.value.title);
+};
 //
-const visibleInfo = ref(false)
+const visibleInfo = ref(false);
 const handleMini = () => {
-  visibleInfo.value = !visibleInfo.value
-}
+  visibleInfo.value = !visibleInfo.value;
+};
 onActivated(() => {
-  getDetail()
-})
+  getDetail();
+});
 </script>
 <style lang="less" scoped>
 .preview-page {
@@ -151,7 +167,7 @@ onActivated(() => {
     margin-top: 20px;
     font-size: 13px;
     text-align: left;
-    opacity: .5;
+    opacity: 0.5;
   }
 }
 
@@ -200,11 +216,10 @@ onActivated(() => {
     // 空心
     -webkit-text-stroke: 1px #fff;
     -webkit-text-fill-color: transparent;
-
   }
 
   .description {
-    font-size: 1.30rem;
+    font-size: 1.3rem;
     margin-bottom: 20px;
   }
 }

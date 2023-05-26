@@ -1,36 +1,68 @@
 <template>
-  <div class="logo-container">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 64">
-      <!-- 这里放置转换后的 SVG 线条图形 -->
-      <!-- 可以使用在线 SVG 转线条工具将 "YLATER" 转换成线条形式的 SVG 图形 -->
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 64">
-        <path fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-          d="M14 50l22-46h14l22 46m-39-44h22v44h-22zm46 0h22v44h-22z" />
-        <path fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-          d="M86 20h20v40h-20zm42-20h22v44h-22z" />
-        <path fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-          d="M150 20h22v44h-22zm42 0h14l22 22-22 22h-14zm0 0h-14l-22 22 22 22h14z" />
+  <div class="me-logo">
+    <div class="logo-icon">
+      <svg
+        version="1.1"
+        id="logo"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        x="0px"
+        y="0px"
+        viewBox="0 0 1200 1200"
+        style="enable-background: new 0 0 1200 1200"
+        xml:space="preserve"
+      >
+        <g>
+          <g>
+            <path
+              class="logo-line"
+              d="M600,160c59.4,0,117,11.6,171.2,34.6c52.4,22.2,99.4,53.9,139.9,94.3c40.4,40.4,72.2,87.5,94.3,139.9
+			C1028.4,483,1040,540.6,1040,600s-11.6,117-34.6,171.2c-22.2,52.4-53.9,99.4-94.3,139.9c-40.4,40.4-87.5,72.2-139.9,94.3
+			C717,1028.4,659.4,1040,600,1040s-117-11.6-171.2-34.6c-52.4-22.2-99.4-53.9-139.9-94.3c-40.4-40.4-72.2-87.5-94.3-139.9
+			C171.6,717,160,659.4,160,600s11.6-117,34.6-171.2c22.2-52.4,53.9-99.4,94.3-139.9c40.4-40.4,87.5-72.2,139.9-94.3
+			C483,171.6,540.6,160,600,160 M600,100c-276.1,0-500,223.9-500,500s223.9,500,500,500s500-223.9,500-500S876.1,100,600,100
+			L600,100z"
+            />
+          </g>
+          <g>
+            <path
+              class="logo-line"
+              d="M773.3,428.1l27.2-40.7c3.3-4.6,4.6-9.8,4.6-14.3c0-11.1-7.8-20.8-17.6-26c-5.9-3.3-11.7-5.2-17.6-5.2
+			c-9.1,0-17.6,3.9-23.4,13.7l-22.7,35.5c-36.5-20.8-78.7-32.7-123.7-32.7c-46.2,0-89.5,12.6-126.6,34.4l-23.8-37.2
+			c-6.5-9.8-15-13.7-23.4-13.7c-5.9,0-11.7,2-17.6,4.6c-10.4,5.9-18.9,15.6-18.9,26.7c0,4.6,1.3,8.5,3.9,13l30.1,45
+			C378.2,476.3,350,539,350,608.2c0,138.1,111.9,250,250,250s250-111.9,250-250C850,537.5,820.6,473.6,773.3,428.1z M630,768
+			c0,6.6-5.4,12-12,12h-36c-6.6,0-12-5.4-12-12V567c0-6.6,5.4-12,12-12h36c6.6,0,12,5.4,12,12V768z"
+            />
+          </g>
+        </g>
       </svg>
-
-    </svg>
+    </div>
+    <div class="logo-text">YLATER</div>
   </div>
 </template>
 
-<script lang="ts">
-</script>
+<script lang="ts"></script>
 
-<style scoped>
-.logo-container {
-  position: relative;
-  width: 200px;
-  height: 64px;
-  cursor: pointer;
+<style scoped lang="less">
+.logo-line {
+  fill: #ff362b;
 }
-
-.fireworks {
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
+.me-logo {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 4px;
+  }
+  .logo-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    letter-spacing: 2px;
+  }
 }
 </style>

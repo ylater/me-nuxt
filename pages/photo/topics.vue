@@ -3,7 +3,13 @@
     <div class="topic-group">
       <div class="topic" v-for="item in topics" @click="handleTopic(item)">
         <div class="topic-cover">
-          <img :src="item.cover_photo.urls.small" alt="">
+          <img :src="item.cover_photo.urls.small" alt="" />
+        </div>
+        <div class="topic-title">{{ item.title }}</div>
+      </div>
+      <div class="topic" v-for="item in topics" @click="handleTopic(item)">
+        <div class="topic-cover">
+          <img :src="item.cover_photo.urls.small" alt="" />
         </div>
         <div class="topic-title">{{ item.title }}</div>
       </div>
@@ -11,22 +17,24 @@
   </div>
 </template>
 <script lang="ts" setup>
-const router = useRouter()
-const topics = ref<any[]>([])
+const router = useRouter();
+const topics = ref<any[]>([]);
 function getTopics() {
-  getPhotoTopics({ per_page: 100 }).then(res => {
-    topics.value = res
-  }).catch(err => {
-    console.log(err)
-  })
+  getPhotoTopics({ per_page: 100 })
+    .then((res) => {
+      topics.value = res;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
-getTopics()
+getTopics();
 function handleTopic(item: any) {
   router.push({
-    path: '/photo/album/' + item.id
-  })
+    path: "/photo/album/" + item.id,
+  });
 }
-</script>	
+</script>
 <style lang="less" scoped>
 .topics {
   --color-text: navy;
@@ -36,17 +44,19 @@ function handleTopic(item: any) {
   --gap: calc(var(--size) / 14);
   --duration: 100s;
   --scroll-start: 0;
-  --scroll-end: calc(-100% - var(--gap));
+  --scroll-end: calc(-50% - var(--gap));
 
   display: flex;
   overflow: hidden;
   user-select: none;
   gap: var(--gap);
-  mask-image: linear-gradient(var(--mask-direction, to right),
-      hsl(0 0% 0% / 0),
-      hsl(0 0% 0% / 1) 20%,
-      hsl(0 0% 0% / 1) 80%,
-      hsl(0 0% 0% / 0));
+  mask-image: linear-gradient(
+    var(--mask-direction, to right),
+    hsl(0 0% 0% / 0),
+    hsl(0 0% 0% / 1) 20%,
+    hsl(0 0% 0% / 1) 80%,
+    hsl(0 0% 0% / 0)
+  );
 
   .topic-group {
     flex-shrink: 0;
@@ -72,10 +82,10 @@ function handleTopic(item: any) {
       border-radius: 0.5rem;
       box-shadow: 0 0.75rem 2rem 0 rgba(0, 0, 0, 0.3);
       cursor: pointer;
-      text-shadow: 0 0 10px rgba(0, 0, 0, .5);
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         inset: 0;
         background: rgba(0, 0, 0, 0.4);
@@ -125,4 +135,4 @@ function handleTopic(item: any) {
     transform: translateY(var(--scroll-end));
   }
 }
-</style>	
+</style>
