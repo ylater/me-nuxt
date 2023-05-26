@@ -1,5 +1,5 @@
 <template>
-  <header class="me-header">
+  <header class="me-header" :class="{ bg: isBack }">
     <me-logo class="logo" @click="handleLogoclick"></me-logo>
     <div class="back-btn" v-if="isBack" @click="handleBack">
       <icon name="ep:back"></icon>
@@ -16,10 +16,12 @@
           :class="{ 'is-active': activeNav?.path === item.path }"
           v-for="item in navList"
           :key="item.name"
+          @click="handleClick(item)"
         >
-          <nuxt-link :to="item.path">{{ item.name }}</nuxt-link>
+          <span>{{ item.name }}</span>
+          <!-- <nuxt-link :to="item.path">{{ item.name }}</nuxt-link> -->
         </div>
-        <me-particles v-if="active"></me-particles>
+        <!-- <me-particles v-if="active"></me-particles> -->
       </div>
     </div>
   </header>
@@ -73,6 +75,10 @@ const handleLogoclick = () => {
 const handleBack = () => {
   Router.back();
 };
+const handleClick = (item: any) => {
+  Router.push(item.path);
+  active.value = false;
+};
 </script>
 <style lang="less" scoped>
 .me-header {
@@ -87,9 +93,29 @@ const handleBack = () => {
   align-items: center;
   justify-content: flex-start;
   // background-color: rgba(0, 0, 0, 0.5);
+  &.bg {
+    background-color: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+  }
 }
 .logo {
   z-index: 10000;
+}
+.back-btn {
+  color: #fff;
+  margin-left: 12px;
+  font-size: 20px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 }
 .menu {
   position: fixed;
@@ -138,8 +164,8 @@ const handleBack = () => {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     // background-color: #000;
     z-index: 1;
     display: flex;
@@ -164,29 +190,55 @@ const handleBack = () => {
       transition-delay: 0.2s;
     }
     &:after {
-      background: rgba(9, 9, 12, 1);
+      background: rgba(9, 9, 12, 0.5);
       transition-delay: 0s;
+      backdrop-filter: blur(8px);
     }
     .nav-item {
       font-size: 8vh;
       margin-bottom: 20px;
+      padding: 0 12px;
       cursor: pointer;
       transition: color 0.5s ease;
       color: #fff;
-      font-size: 8vh;
+      font-size: 6vh;
       font-weight: 900;
-      line-height: 1.15;
+      line-height: 1.5;
       letter-spacing: 3px;
       text-transform: uppercase;
       transform: translate(100px, 0);
       transition: all 0.3s;
       text-align: left;
       opacity: 0;
+      &::before {
+        content: " ";
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        inset: 0 0 0 0;
+        background: #ff362b;
+        z-index: -1;
+        transform: scaleX(0);
+        transform-origin: bottom right;
+        transition: transform 0.3s ease;
+      }
       &:hover {
+        // color: #ff362b;
+        text-decoration: underline;
+        &::before {
+          transform: scaleX(1);
+          transform-origin: bottom left;
+        }
       }
       &.is-active {
         color: #ff362b;
         text-decoration: underline;
+        &:hover {
+          color: #fff;
+        }
       }
     }
   }
@@ -222,6 +274,7 @@ const handleBack = () => {
         opacity: 1;
         transform: translate(0px, 0px);
         transition: all 0.5s;
+
         &:nth-child(1) {
           transition-delay: 0.1s;
         }

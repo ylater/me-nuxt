@@ -1,5 +1,6 @@
 <template>
   <div class="me-root">
+    <me-header></me-header>
     <!-- bg -->
     <me-cover
       class="bg-cover"
@@ -10,7 +11,7 @@
     <me-screen-lock v-if="!unlocked"></me-screen-lock>
     <!-- containter -->
     <div class="me-containter" v-if="unlocked">
-      <me-app-bar></me-app-bar>
+      <!-- <me-app-bar></me-app-bar> -->
       <div class="me-main">
         <slot></slot>
       </div>

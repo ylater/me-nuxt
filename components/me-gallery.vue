@@ -1,7 +1,12 @@
 <template>
-  <div class='me-gallery'>
-    <div class="photo" v-for='(item, index) in photos' :key='index' :class="setWH(index)"
-      @click.stop="handleDetail(item, index)">
+  <div class="me-gallery">
+    <div
+      class="photo"
+      v-for="(item, index) in photos"
+      :key="index"
+      :class="setWH(index)"
+      @click="handleDetail(item, index)"
+    >
       <div class="photo-image">
         <img :src="item.urls?.regular" alt="" />
       </div>
@@ -10,71 +15,90 @@
       </div>
     </div>
     <!-- preview -->
-    <a-image-preview-group v-if="visibleOverlay" v-model:visible="visibleOverlay" v-model:current="current" infinite
-      :srcList="photosList">
+    <a-image-preview-group
+      v-if="visibleOverlay"
+      v-model:visible="visibleOverlay"
+      v-model:current="current"
+      infinite
+      :srcList="photosList"
+    >
       <template #actions>
         <div class="arco-image-preview-toolbar-action" @click="downloadImage">
           <a-tooltip content="原图下载">
             <a-spin v-if="downloading" />
             <span v-else class="arco-image-preview-toolbar-action-content">
-              <Icon style="display: flex;" name="icon-park:download" size="14"></Icon>
+              <Icon
+                style="display: flex"
+                name="icon-park:download"
+                size="14"
+              ></Icon>
             </span>
           </a-tooltip>
         </div>
-        <a class="arco-image-preview-toolbar-action" :href="photo.links.html" target="_blank">
+        <a
+          class="arco-image-preview-toolbar-action"
+          :href="photo.links.html"
+          target="_blank"
+        >
           <a-tooltip content="图片地址">
             <span class="arco-image-preview-toolbar-action-content">
-              <Icon style="display: flex;" name="bxl:unsplash" size="14"></Icon>
+              <Icon style="display: flex" name="bxl:unsplash" size="14"></Icon>
             </span>
           </a-tooltip>
         </a>
+        <div class="arco-image-preview-toolbar-action">
+          <a-tooltip :content="`Photo By ${photo.user.first_name}`">
+            <div style="padding: 6px 0">
+              <me-user :user="photo.user" avatarOnly></me-user>
+            </div>
+          </a-tooltip>
+        </div>
       </template>
     </a-image-preview-group>
   </div>
 </template>
 <script lang="ts" setup>
-import { saveAs } from 'file-saver'
+import { saveAs } from "file-saver";
 const props = defineProps({
   photos: {
     type: Array as PropType<any[]>,
     default: [],
   },
-})
+});
 const setWH = (index: number) => {
-  const css = ['photo--h-2', 'photo--v-2', 'photo--h-2 photo--v-2', '']
-  return css[index % 3]
-}
-
+  const css = ["photo--h-2", "photo--v-2", "photo--h-2 photo--v-2", ""];
+  return css[index % 3];
+};
 
 //detail
-const list = ref<any>([])
-const photo = ref<any>({})
-const visibleOverlay = ref(false)
-const current = ref(0)
+const list = ref<any>([]);
+const photo = ref<any>({});
+const visibleOverlay = ref(false);
+const current = ref(0);
 const photosList = computed(() => {
   return props.photos.map((v: any) => {
-    return v.urls?.regular
-  })
-})
+    return v.urls?.regular;
+  });
+});
 function handleDetail(item: any, index: number) {
-  photo.value = { ...item }
-  current.value = index
-  visibleOverlay.value = true
+  photo.value = { ...item };
+  current.value = index;
+  visibleOverlay.value = true;
 }
 function close() {
-  visibleOverlay.value = false
+  visibleOverlay.value = false;
 }
 //download
 const downloadUrl = computed(() => {
-  return props.photos[current.value].urls?.full + '?force=true'
-})
-const downloading = ref(false)
+  return props.photos[current.value].urls?.full + "?force=true";
+});
+const downloading = ref(false);
 const downloadImage = () => {
-  downloading.value = true
-  saveAs(downloadUrl.value, props.photos[current.value].id)
-  downloading.value = false
-}
-</script>	
+  downloading.value = true;
+  saveAs(downloadUrl.value, props.photos[current.value].id);
+  downloading.value = false;
+};
+</script>
 <style lang="less" scoped>
 .me-gallery {
   display: grid;
@@ -106,7 +130,7 @@ const downloadImage = () => {
     cursor: pointer;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
@@ -128,6 +152,10 @@ const downloadImage = () => {
       &::before {
         opacity: 0;
       }
+      .photo-author {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     .photo-author {
@@ -139,8 +167,12 @@ const downloadImage = () => {
       align-items: center;
       justify-content: flex-end;
       padding: 4px;
+      transform: translateY(100%);
+      opacity: 0;
+      transition: all 0.5s ease;
+      background-color: rgba(0, 0, 0, 0.5);
+      pointer-events: none;
       // backdrop-filter: blur(4px);
-
     }
 
     &--h-2 {
@@ -151,7 +183,6 @@ const downloadImage = () => {
       grid-row-end: span 2;
     }
   }
-
 }
 
 // @media screen and (max-width: 1440px) {
@@ -167,7 +198,6 @@ const downloadImage = () => {
     grid-template-columns: repeat(6, 1fr);
     grid-auto-rows: 150px;
     grid-gap: 4px;
-
   }
 }
 
@@ -176,7 +206,6 @@ const downloadImage = () => {
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: 100px;
     grid-gap: 4px;
-
   }
 }
-</style>	
+</style>

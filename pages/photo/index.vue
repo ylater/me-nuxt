@@ -5,18 +5,6 @@
       <div class="bg-image" :style="getBackgroundStyles"></div>
       <div class="bg-filter" :class="{ focus: searching }"></div>
     </div>
-    <!--  header -->
-    <!-- <div class="switch-tab">
-      <div class="tab">
-        <icon name="ep:search"></icon>
-      </div>
-      <div class="tab">
-        <icon name="ep:picture"></icon>
-      </div>
-      <div class="tab">
-        <icon name="ep:picture"></icon>
-      </div>
-    </div> -->
     <!-- search bar  -->
     <me-search-bar
       v-model="keyword"
@@ -56,7 +44,7 @@
         <div class="empty-text">No results found</div>
       </div>
     </div>
-    <Topics class="pin-bottom" v-if="!searching"></Topics>
+    <Topics v-if="!searching"></Topics>
     <!-- preview -->
     <a-image-preview-group
       v-if="visibleOverlay"
@@ -106,12 +94,11 @@ function getCoverImage() {
   //获取当前时间
   const timestamp = new Date().getTime();
   const params = {
-    topics: "6sMVjTLSkeQ",
+    // topics: "6sMVjTLSkeQ",
     // timestamp: timestamp
   };
   getRandomPhotos(params).then((res) => {
     cover.value = res;
-    console.log(res);
   });
 }
 const getBackgroundStyles = computed(() => {
@@ -171,7 +158,6 @@ const loadData = () => {
 const gridRowEnd = () => {
   //5-10随机
   const rowEnd = Math.floor(Math.random() * (10 - 5 + 1) + 5);
-  console.log(rowEnd);
   return `span ${rowEnd}`;
 };
 const setVisible = () => {};
@@ -221,11 +207,9 @@ getCoverImage();
 @globalPadding: 40px;
 
 .photo-page {
+  width: 100%;
+  height: 100%;
   position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: auto;
-  background-color: #1e1e1e;
 
   .lucky-btn {
     position: fixed;

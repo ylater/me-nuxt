@@ -1,25 +1,53 @@
 <template>
-  <div class='home-page'>
+  <div class="home-page">
     <div class="search">
       <div class="search-input">
         <IconCSS class="icon" name="ep:search"></IconCSS>
-        <input class="input-inner" type="text" placeholder="Search" v-model="keyword" @keyup.enter="handleSearch" />
-        <me-button v-if="keyword" @click="handleClear" size="small" icon="ep:close"></me-button>
+        <input
+          class="input-inner"
+          type="text"
+          placeholder="Search"
+          v-model="keyword"
+          @keyup.enter="handleSearch"
+        />
+        <me-button
+          v-if="keyword"
+          @click="handleClear"
+          size="small"
+          icon="ep:close"
+        ></me-button>
       </div>
       <div class="search-tags">
-        <span class="tag" v-for="item in categories" @click="tagSearch(item.id)" :key="item.id">{{ item.name
-        }}</span>
+        <span
+          class="tag"
+          v-for="item in categories"
+          @click="tagSearch(item.id)"
+          :key="item.id"
+          >{{ item.name }}</span
+        >
       </div>
     </div>
     <div class="pager">
-      <me-pagination v-model:page="page" :total="total" @change="getListByPage"></me-pagination>
+      <me-pagination
+        v-model:page="page"
+        :total="total"
+        @change="getListByPage"
+      ></me-pagination>
     </div>
     <ol class="video-list">
-      <li class="video-card" v-for="item in list" :key="item.id" @click="handlePreview(item)">
-        <me-media-card :poster="item.thumbnail" :video="item.urls.mp4_preview" :title="item.title">
+      <li
+        class="video-card"
+        v-for="item in list"
+        :key="item.id"
+        @click="handlePreview(item)"
+      >
+        <me-media-card
+          :poster="item.thumbnail"
+          :video="item.urls.mp4_preview"
+          :title="item.title"
+        >
           <div class="video-info">
             <div class="meta-list">
-
               <div class="meta">
                 <IconCSS class="icon" name="ep:view"></IconCSS>
                 {{ item.views }}
@@ -39,87 +67,86 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { useAppStore } from '@/stores'
+import { useAppStore } from "@/stores";
 definePageMeta({
-  key: 'index',
-  layout: 'ylater',
-})
-const Router = useRouter()
-const appStore = useAppStore()
+  key: "index",
+  layout: "ylater",
+});
+const Router = useRouter();
+const appStore = useAppStore();
 const handlePreview = (item: any) => {
-  appStore.setBgVideo(item.urls.mp4)
-  const videoId = item.id
-  Router.push('/cover/preview' + '?id=' + videoId)
-}
+  appStore.setBgVideo(item.urls.mp4);
+  const videoId = item.id;
+  Router.push("/cover/preview" + "?id=" + videoId);
+};
 const query = ref({
-  urls: 'true',
-  page_size: 10
-})
-const page = ref(1)
-const total = ref(0)
-const list = ref<any>([])
-const searchType = ref('category')
+  urls: "true",
+  page_size: 10,
+});
+const page = ref(1);
+const total = ref(0);
+const list = ref<any>([]);
+const searchType = ref("category");
 const getListByPage = () => {
   // getList()
-  if (searchType.value === 'keyword') {
-    getList()
+  if (searchType.value === "keyword") {
+    getList();
   } else {
-    getVideosInCategory()
+    getVideosInCategory();
   }
-}
+};
 const getList = async () => {
   const params = {
     ...query.value,
     query: keyword.value,
     page_size: 10,
     page: page.value,
-  }
-  const data = await getVideoList(params)
-  list.value = data.hits
-  total.value = data.total
-}
+  };
+  const data = await getVideoList(params);
+  list.value = data.hits;
+  total.value = data.total;
+};
 
 //search
-const keyword = ref('')
+const keyword = ref("");
 const handleClear = () => {
-  keyword.value = ''
-  searchType.value = 'category'
-  page.value = 1
-  getVideosInCategory()
-}
+  keyword.value = "";
+  searchType.value = "category";
+  page.value = 1;
+  getVideosInCategory();
+};
 const handleSearch = async () => {
-  searchType.value = 'keyword'
-  page.value = 1
-  getList()
-
-}
+  searchType.value = "keyword";
+  page.value = 1;
+  getList();
+};
 //分类
-const categorieId = ref('7bh0a0p2JM')
-const categories = ref<any>([])
+const categorieId = ref("7bh0a0p2JM");
+const categories = ref<any>([]);
 const getCategories = async () => {
-  const data = await getCategoriesList()
-  categories.value = data.hits
-}
+  const data = await getCategoriesList();
+  categories.value = data.hits;
+};
 const tagSearch = (id: string) => {
-  categorieId.value = id
-  searchType.value = 'category'
-  page.value = 1
-  getVideosInCategory()
-}
+  categorieId.value = id;
+  searchType.value = "category";
+  page.value = 1;
+  getVideosInCategory();
+};
 const getVideosInCategory = async () => {
   const params = {
     ...query.value,
     id: categorieId.value,
     page_size: 10,
     page: page.value,
-  }
-  const data = await getCategoriesVideos(params)
-  list.value = data.hits
-  total.value = data.total
-}
-getCategories()
-getVideosInCategory()
-</script>	
+  };
+  const data = await getCategoriesVideos(params);
+  list.value = data.hits;
+  total.value = data.total;
+};
+getCategories();
+getVideosInCategory();
+</script>
 <style lang="less" scoped>
 .home-page {
   width: 100%;
@@ -133,7 +160,6 @@ getVideosInCategory()
   list-style: none;
 
   .video-card {
-
     &:hover {
       z-index: 1;
     }
@@ -239,4 +265,4 @@ getVideosInCategory()
   align-items: center;
   padding: 20px 0;
 }
-</style>	
+</style>
