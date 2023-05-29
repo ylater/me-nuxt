@@ -9,7 +9,7 @@
         />
       </div>
       <div class="content-right">
-        <h2>{{ item.title }}</h2>
+        <h2 @click="handleDetail(item)">{{ item.title }}</h2>
         <div>
           <p>
             {{ item.total_photos }} photos · Curated by
@@ -42,6 +42,7 @@
 </template>
 <script lang="ts" setup>
 // import { defineProps } from 'vue'
+const Router = useRouter();
 const props = defineProps({
   item: {
     type: Object as PropType<any>,
@@ -51,6 +52,9 @@ const props = defineProps({
 const cover = ref(props.item.cover_photo.urls.regular);
 const changeCover = (photo: any) => {
   cover.value = photo.urls.regular;
+};
+const handleDetail = (item: any) => {
+  Router.push("/photo/collections/" + item.id);
 };
 </script>
 <style lang="less" scoped>
@@ -64,7 +68,6 @@ const changeCover = (photo: any) => {
   font-size: 1em;
   line-height: 1.5;
   color: #303336;
-  cursor: pointer;
   background: linear-gradient(33deg, #121317, #323b42);
   box-shadow: 0 5px 10px #0002;
 
@@ -74,6 +77,7 @@ const changeCover = (photo: any) => {
     font-weight: 700;
     line-height: 1;
     color: #fff;
+    cursor: pointer;
   }
 
   p {

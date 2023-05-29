@@ -1,8 +1,13 @@
 <template>
   <div class="collections">
     <me-observer :isLoading="isLoading" @loadMore="loadData">
+      <div class="collections-info">
+        <h1>{{ detail.title }}</h1>
+        <p>{{ detail.description }}</p>
+        <p>Total Photos: {{ total }}</p>
+      </div>
       <me-gallery :photos="list"></me-gallery>
-      <a-empty></a-empty>
+      <a-empty v-if="!isLoading && list.length === 0"></a-empty>
     </me-observer>
   </div>
 </template>
@@ -45,5 +50,20 @@ getListByPage();
 .collections {
   position: relative;
   padding: 30px;
+  .collections-info {
+    position: relative;
+    width: 100%;
+    padding: 40px 24px;
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    p {
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 12px;
+    }
+  }
 }
 </style>

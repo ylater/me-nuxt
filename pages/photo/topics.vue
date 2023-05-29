@@ -5,13 +5,19 @@
         <div class="topic-cover">
           <img :src="item.cover_photo.urls.small" alt="" />
         </div>
-        <div class="topic-title">{{ item.title }}</div>
+        <div class="topic-info">
+          <div class="topic-title">{{ item.title }}</div>
+          <p>photos:{{ item.total_photos }}</p>
+        </div>
       </div>
       <div class="topic" v-for="item in topics" @click="handleTopic(item)">
         <div class="topic-cover">
           <img :src="item.cover_photo.urls.small" alt="" />
         </div>
-        <div class="topic-title">{{ item.title }}</div>
+        <div class="topic-info">
+          <div class="topic-title">{{ item.title }}</div>
+          <p>photos:{{ item.total_photos }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -45,7 +51,7 @@ function handleTopic(item: any) {
   --duration: 100s;
   --scroll-start: 0;
   --scroll-end: calc(-50% - var(--gap));
-
+  width: 100%;
   display: flex;
   overflow: hidden;
   user-select: none;
@@ -53,18 +59,21 @@ function handleTopic(item: any) {
   mask-image: linear-gradient(
     var(--mask-direction, to right),
     hsl(0 0% 0% / 0),
-    hsl(0 0% 0% / 1) 20%,
-    hsl(0 0% 0% / 1) 80%,
+    hsl(0 0% 0% / 1) 10%,
+    hsl(0 0% 0% / 1) 90%,
     hsl(0 0% 0% / 0)
   );
+  opacity: 0.5;
+  &:hover {
+    opacity: 1;
+  }
 
   .topic-group {
+    min-width: 100%;
     flex-shrink: 0;
     display: flex;
-    align-items: center;
-    justify-content: space-around;
     gap: var(--gap);
-    min-width: 100%;
+    padding: 12px;
     animation: scroll-x var(--duration) linear infinite;
 
     &:hover {
@@ -73,28 +82,17 @@ function handleTopic(item: any) {
 
     .topic {
       position: relative;
-      display: grid;
-      height: 160px;
+      display: flex;
       border-radius: 12px;
-      overflow: hidden;
+      padding: 8px;
       place-items: center;
-      aspect-ratio: 16/9;
-      border-radius: 0.5rem;
-      box-shadow: 0 0.75rem 2rem 0 rgba(0, 0, 0, 0.3);
       cursor: pointer;
-      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-
-      &::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.4);
-        background-blend-mode: normal;
-      }
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.2);
 
       .topic-cover {
-        width: 100%;
-        height: 100%;
+        width: 60px;
+        height: 60px;
         overflow: hidden;
         border-radius: 0.5rem;
 
@@ -104,13 +102,20 @@ function handleTopic(item: any) {
           object-fit: cover;
         }
       }
-
-      .topic-title {
-        position: absolute;
-        color: #fff;
-        font-size: 1.5rem;
-        font-weight: 600;
-        text-align: center;
+      .topic-info {
+        flex: 1;
+        margin-left: 10px;
+        .topic-title {
+          color: #fff;
+          font-size: 18px;
+          font-weight: 600;
+          margin-bottom: 8px;
+        }
+        p {
+          color: #fff;
+          font-size: 14px;
+          opacity: 0.5;
+        }
       }
     }
   }

@@ -1,64 +1,119 @@
 <template>
-  <div class="search-bar-aligner" :class="{ 'searching': searching }" @click="handleFocus">
+  <div class="search-bar-aligner" :class="{ searching: searching }">
     <div class="search-bar-wrapper">
-      <div class="search-bar">
+      <div class="search-tab" v-if="showTab">
+        <div
+          class="tab-item"
+          :class="{ active: tab.value === tabIndex }"
+          v-for="tab in tabs"
+          :key="tab.value"
+          @click="handleTabClick(tab.value)"
+        >
+          {{ tab.name }}
+        </div>
+        <div
+          class="tab-slider"
+          :style="{
+            left: tabPosition + 'px',
+          }"
+        ></div>
+      </div>
+      <div class="search-bar" @click="handleFocus">
         <div class="search-icon">
           <IconCSS class="icon" name="ep:search"></IconCSS>
         </div>
-        <input v-model="keyword" @blur="handleBlur" @keyup.enter="onPressEnter" @input="handleInput" ref="searchInputRef"
-          class="search-bar-input" type="text" placeholder="Search" />
+        <input
+          v-model="keyword"
+          @blur="handleBlur"
+          @keyup.enter="onPressEnter"
+          @input="handleInput"
+          ref="searchInputRef"
+          class="search-bar-input"
+          type="text"
+          placeholder="Search"
+        />
         <div class="reset-icon" v-if="searching" @click.stop="handleReset">
           <Icon name="ep:refresh"></Icon>
         </div>
       </div>
     </div>
+    <p class="search-tips">
+      {{ tips }} Or visit
+      <NuxtLink class="link" to="/photo/collections">Collections</NuxtLink>
+    </p>
   </div>
 </template>
 <script lang="ts" setup>
 const props = defineProps({
   modelValue: {
     type: String,
-    default: ''
+    default: "",
   },
   isSearching: {
     type: Boolean,
-    default: false
-  }
-})
-const tips = ref('Hello. Please click  Enter to search.')
-const emit = defineEmits(['search', 'reset', 'update:modelValue'])
-const keyword = ref(props.modelValue)
-const searching = ref(props.isSearching)
-const searchInputRef = ref<HTMLInputElement | null | undefined>()
-
+    default: false,
+  },
+  showTab: {
+    type: Boolean,
+    default: false,
+  },
+});
+const tips = ref("Hello. Please click  Enter to search.");
+const emit = defineEmits(["search", "reset", "update:modelValue", "tabChange"]);
+const keyword = ref(props.modelValue);
+const searching = ref(props.isSearching);
+const searchInputRef = ref<HTMLInputElement | null | undefined>();
+const tabs = [
+  {
+    name: "图片",
+    value: "photos",
+  },
+  {
+    name: "收藏",
+    value: "collections",
+  },
+  {
+    name: "用户",
+    value: "users",
+  },
+];
+const tabIndex = ref("photos");
+const handleTabClick = (val: string) => {
+  tabIndex.value = val;
+  emit("tabChange", val);
+};
+const tabPosition = computed(() => {
+  const index = tabs.findIndex((tab) => tab.value === tabIndex.value);
+  return index * 60;
+});
 const handleFocus = () => {
   // @ts-ignore
-  searchInputRef.value.focus()
-}
+  searchInputRef.value.focus();
+};
 const handleBlur = () => {
   // if (searching.value) searching.value = true
   // searching.value = false
-}
+};
 const onPressEnter = () => {
-  emit('search', keyword.value)
-  searching.value = true
-}
+  emit("search", keyword.value);
+  searching.value = true;
+};
 const handleInput = () => {
-  emit('update:modelValue', keyword.value)
-}
+  emit("update:modelValue", keyword.value);
+};
 const handleReset = () => {
-  keyword.value = ''
-  searching.value = false
-  searchInputRef.value?.blur()
-  emit('reset')
-
-}
-</script>	
+  keyword.value = "";
+  searching.value = false;
+  searchInputRef.value?.blur();
+  emit("reset");
+};
+</script>
 <style lang="less" scoped>
 .search-bar-aligner {
   align-items: center;
   display: flex;
   justify-content: center;
+  flex-direction: column;
   height: 100%;
   pointer-events: none;
   position: fixed;
@@ -81,7 +136,8 @@ const handleReset = () => {
       backdrop-filter: blur(5px);
       background-color: rgba(255, 255, 255, 0.1);
       border-radius: 6px;
-      box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+      box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px,
+        rgba(0, 0, 0, 0.12) 0px 1px 4px;
       display: flex;
       gap: 10px;
       justify-content: center;
@@ -91,8 +147,6 @@ const handleReset = () => {
       // width: calc(100% - 20px);
       width: 100%;
       overflow: hidden;
-
-
 
       .search-icon {
         position: relative;
@@ -105,7 +159,7 @@ const handleReset = () => {
         margin-right: 10px;
 
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           width: 1px;
           height: 100%;
@@ -148,7 +202,6 @@ const handleReset = () => {
 
           &::placeholder {
             color: rgba(255, 255, 255, 0.2);
-
           }
         }
       }
@@ -158,7 +211,54 @@ const handleReset = () => {
   &.searching {
     height: 100px;
   }
-
-
 }
-</style>	
+.search-tips {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  pointer-events: all;
+  .link {
+    color: rgba(255, 255, 255, 1);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+.search-tab {
+  position: relative;
+  display: flex;
+  border-radius: 50px;
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+  pointer-events: all;
+  .tab-item {
+    position: relative;
+    z-index: 1;
+    width: 60px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 250ms;
+    cursor: pointer;
+    font-size: 14px;
+    &.active {
+      color: rgba(255, 255, 255, 1);
+    }
+  }
+  .tab-slider {
+    position: absolute;
+    z-index: -1;
+    width: 60px;
+    height: 30px;
+    border-radius: 30px;
+    transform: all 250ms;
+    background: linear-gradient(45deg, #f1b211 0%, #ff362b 100%);
+    transition: all 250ms;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#05abe0', endColorstr='#8200f4',GradientType=1 );
+  }
+}
+</style>

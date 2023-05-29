@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@vueuse/nuxt',
     'nuxt-icon',
-    '@nuxt/image-edge',
+    // '@nuxt/image',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     // '@nuxtjs/color-mode',

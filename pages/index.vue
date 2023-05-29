@@ -3,14 +3,18 @@
     <me-particles></me-particles>
     <div class="album">
       <section class="section">
-        <me-card class="card">
+        <me-card>
           <div class="logo-card content">
             <img width="80" src="@/assets/logo.svg" />
             <h1>YLATER</h1>
+            <p>custom web/app design and development for your next project.</p>
           </div>
         </me-card>
-        <me-card class="card">
-          <div class="topics-box">
+        <me-card class="card" @click="goTo('/photo')">
+          <div class="cover-image">
+            <img :src="coverImage" alt="" />
+          </div>
+          <!-- <div class="topics-box">
             <div class="topics">
               <div class="topic" v-for="item in topics" :key="item.id">
                 <div class="topic-cover">
@@ -25,7 +29,7 @@
                 <div class="topic-title">{{ item.title }}</div>
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="card-info">
             <div>
               <h2 class="card-title">图片搜索</h2>
@@ -37,7 +41,7 @@
             ></router-link>
           </div>
         </me-card>
-        <me-card class="card">
+        <me-card class="card" @click="goTo('/cover')">
           <div class="card-mask"></div>
           <me-cover
             class="bg-cover"
@@ -56,7 +60,7 @@
             </a-button>
           </div>
         </me-card>
-        <me-card class="card">
+        <me-card class="card" @click="goTo('/about')">
           <div class="user-card">
             <div class="user-profile">
               <div class="user-avatar">
@@ -84,13 +88,13 @@
             </div>
           </div>
         </me-card>
-        <me-card class="card">
+        <me-card class="card" @click="goTo('/badminton')">
           <div class="bwf">
             <img src="@/assets/bwf.jpg" />
           </div>
         </me-card>
-        <me-card class="card">
-          <me-slider></me-slider>
+        <me-card class="card" @click="goTo('/admin')">
+          <!-- <me-slider></me-slider> -->
         </me-card>
       </section>
     </div>
@@ -102,6 +106,22 @@ definePageMeta({
   key: "index",
   layout: "home",
 });
+const Router = useRouter();
+const appStore = useAppStore();
+const coverImage = computed(() => appStore.coverImage);
+function getCoverImage() {
+  //获取当前时间
+  const timestamp = new Date().getTime();
+  const params = {
+    // topics: "6sMVjTLSkeQ",
+    // timestamp: timestamp
+  };
+  getRandomPhotos(params).then((res) => {
+    const url = res.urls.full;
+    appStore.setCoverImage(url);
+  });
+}
+getCoverImage();
 const topics = ref<any[]>([]);
 function getTopics() {
   getPhotoTopics({ per_page: 100 })
@@ -114,6 +134,10 @@ function getTopics() {
     });
 }
 getTopics();
+// 跳转
+function goTo(path: string) {
+  Router.push(path);
+}
 </script>
 <style lang="less" scoped>
 .home-page {
@@ -128,13 +152,14 @@ getTopics();
   position: relative;
   width: 100%;
   height: 100%;
+  padding: 24px;
   display: flex;
-  // flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 
   h1 {
-    font-size: 80px;
+    font-size: 64px;
     font-weight: 900;
     width: min-content;
     // margin: 12px auto;
@@ -161,34 +186,13 @@ getTopics();
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
-
-    & + p {
-      font-weight: 500;
-      color: #fff;
-      text-align: center;
-      background: linear-gradient(
-        219deg,
-        var(--color-1) 19%,
-        transparent 19%,
-        transparent 20%,
-        var(--color-2) 20%,
-        var(--color-2) 39%,
-        transparent 39%,
-        transparent 40%,
-        var(--color-3) 40%,
-        var(--color-3) 59%,
-        transparent 59%,
-        transparent 60%,
-        var(--color-4) 60%,
-        var(--color-4) 79%,
-        transparent 79%,
-        transparent 80%,
-        var(--color-5) 80%
-      );
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-    }
+  }
+  p {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #fff;
+    text-align: left;
+    opacity: 0.8;
   }
 }
 
@@ -606,6 +610,31 @@ getTopics();
   overflow: hidden;
   border-radius: 12px;
   cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.cover-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  cursor: pointer;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+  }
 
   img {
     width: 100%;
