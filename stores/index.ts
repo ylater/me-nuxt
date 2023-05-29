@@ -4,6 +4,7 @@ export const useAppStore = defineStore('app', {
     unlocked: false,
     visiblePin: false,
     video: '',
+    coverImage:''
   }),
   persist: {
     storage: persistedState.sessionStorage,
@@ -17,8 +18,14 @@ export const useAppStore = defineStore('app', {
     },
     setBgVideo(val: string) {
       this.video = val
+    },
+    setCoverImage(val: string) {
+      this.coverImage = val
     }
-  }
+  },
+  getters: {
+    
+  },
 
 })
 if (import.meta.hot) {

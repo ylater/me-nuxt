@@ -1,12 +1,6 @@
 <template>
   <div class="collection-list">
-    <cCard
-      class="main-card"
-      :item="item"
-      v-for="item in list"
-      :key="item.id"
-      @click="handleDetail(item)"
-    >
+    <cCard class="main-card" :item="item" v-for="item in list" :key="item.id">
     </cCard>
   </div>
 </template>
@@ -17,15 +11,14 @@ const list = ref<any>([]);
 const getList = async () => {
   const params = {
     page: 1,
-    per_page: 2000,
+    per_page: 20,
   };
   const data = await getCollections(params);
-  list.value = data;
+  list.value = data.filter((item: any) => {
+    return item.user.id !== "iwi9-4OXLYY";
+  });
 };
 getList();
-const handleDetail = (item: any) => {
-  Router.push("/photo/collections/" + item.id);
-};
 </script>
 <style lang="less" scoped>
 .collection-list {

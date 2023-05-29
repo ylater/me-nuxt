@@ -7,7 +7,7 @@
       :class="setWH(index)"
       @click="handleDetail(item, index)"
     >
-      <div class="photo-image">
+      <div class="photo-image visible">
         <img :src="item.urls?.regular" alt="" />
       </div>
       <div class="photo-author">
@@ -66,8 +66,13 @@ const props = defineProps({
   },
 });
 const setWH = (index: number) => {
-  const css = ["photo--h-2", "photo--v-2", "photo--h-2 photo--v-2", ""];
-  return css[index % 3];
+  const css = [
+    "photo--h-2",
+    "photo--v-1",
+    "photo--h-2 photo--v-2",
+    "photo--h-1 photo--v-1",
+  ];
+  return css[index % 4];
 };
 
 //detail
@@ -89,13 +94,12 @@ function close() {
   visibleOverlay.value = false;
 }
 //download
-const downloadUrl = computed(() => {
-  return props.photos[current.value].urls?.full + "?force=true";
-});
 const downloading = ref(false);
-const downloadImage = () => {
+const downloadImage = async () => {
   downloading.value = true;
-  saveAs(downloadUrl.value, props.photos[current.value].id);
+  const id = props.photos[current.value].id;
+  const image = await getPhotoDownload({ id });
+  saveAs(image.url, id);
   downloading.value = false;
 };
 </script>
@@ -105,7 +109,7 @@ const downloadImage = () => {
   grid-template-columns: repeat(8, 1fr);
   grid-auto-rows: 200px;
   grid-gap: 4px;
-  // grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  // grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 
   .photo-image {
     width: 100%;
@@ -121,6 +125,16 @@ const downloadImage = () => {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.5s ease;
+      transform: translateX(-100%);
+    }
+    &.visible {
+      opacity: 1;
+      img {
+        transform: translateX(0);
+        transition: transform 0.5s ease;
+        transition-delay: 1s;
+      }
     }
   }
 

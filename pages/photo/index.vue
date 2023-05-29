@@ -10,31 +10,13 @@
       v-model="keyword"
       @search="onPressEnter"
       @reset="resetSearch"
-    ></me-search-bar>
+    >
+      123121
+    </me-search-bar>
     <!-- photos -->
     <div class="photos">
       <me-observer :isLoading="isLoading" @loadMore="loadData" v-if="total > 0">
-        <div class="photo-list">
-          <div
-            class="photo-item"
-            v-for="(photo, index) in photos"
-            :key="photo.id"
-            :style="{
-              //5-10随机
-              gridRowEnd: photo.gridRowEnd,
-            }"
-            @click="handleDetail(photo, index)"
-          >
-            <div class="photo-image visible">
-              <img :src="photo.urls?.regular" alt="" />
-            </div>
-            <div class="photo-info">
-              <div class="photo-title">
-                {{ photo.user.username }}
-              </div>
-            </div>
-          </div>
-        </div>
+        <me-gallery :photos="photos"></me-gallery>
       </me-observer>
       <!-- empty tips -->
       <div class="empty" v-if="searching && total === 0 && !isLoading">
@@ -44,34 +26,10 @@
         <div class="empty-text">No results found</div>
       </div>
     </div>
-    <Topics v-if="!searching"></Topics>
-    <!-- preview -->
-    <a-image-preview-group
-      v-if="visibleOverlay"
-      v-model:visible="visibleOverlay"
-      v-model:current="current"
-      infinite
-      :srcList="photosList"
-    >
-      <template #actions>
-        <div class="arco-image-preview-toolbar-action" @click="downloadImage">
-          <a-tooltip content="原图下载">
-            <a-spin v-if="downloading" />
-            <span v-else class="arco-image-preview-toolbar-action-content">
-              <Icon
-                style="display: flex"
-                name="icon-park:download"
-                size="14"
-              ></Icon>
-            </span>
-          </a-tooltip>
-        </div>
-      </template>
-    </a-image-preview-group>
+    <Topics class="topics" v-if="!searching"></Topics>
   </div>
 </template>
 <script lang="ts" setup>
-import { saveAs } from "file-saver";
 import Topics from "./topics.vue";
 definePageMeta({
   key: "photo",
@@ -139,7 +97,6 @@ const getPhotos = () => {
       const list = res.results.map((v: any) => {
         return {
           ...v,
-          gridRowEnd: gridRowEnd(),
         };
       });
       photos.value = [...photos.value, ...list];
@@ -154,39 +111,6 @@ const loadData = () => {
   if (photos.value.length >= total.value) return;
   page.value++;
   getPhotos();
-};
-const gridRowEnd = () => {
-  //5-10随机
-  const rowEnd = Math.floor(Math.random() * (10 - 5 + 1) + 5);
-  return `span ${rowEnd}`;
-};
-const setVisible = () => {};
-//detail
-const photo = ref<any>({});
-const visibleOverlay = ref(false);
-const current = ref(0);
-const photosList = computed(() => {
-  return photos.value.map((v: any) => {
-    return v.urls?.regular;
-  });
-});
-function handleDetail(item: any, index: number) {
-  photo.value = { ...item };
-  current.value = index;
-  visibleOverlay.value = true;
-}
-function close() {
-  visibleOverlay.value = false;
-}
-//download
-const downloadUrl = computed(() => {
-  return photos.value[current.value].urls?.full + "?force=true";
-});
-const downloading = ref(false);
-const downloadImage = () => {
-  downloading.value = true;
-  saveAs(downloadUrl.value, photos.value[current.value].id);
-  downloading.value = false;
 };
 //reset
 const resetSearch = () => {
@@ -422,5 +346,10 @@ getCoverImage();
       background-color: rgba(255, 255, 255, 0.2);
     }
   }
+}
+.topics {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 </style>
