@@ -15,7 +15,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background-color: #1f2029;
+  background-color: var(--me-bg-color);
   transition: all 300ms linear;
   color: #c4c3ca;
   .layout-main {

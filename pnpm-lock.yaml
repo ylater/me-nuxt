@@ -54,6 +54,9 @@ devDependencies:
   '@nuxt/image':
     specifier: ^0.7.1
     version: 0.7.1
+  '@nuxtjs/google-fonts':
+    specifier: ^3.0.1
+    version: 3.0.1(rollup@2.79.1)
   '@nuxtjs/i18n':
     specifier: 8.0.0-beta.11
     version: 8.0.0-beta.11(rollup@2.79.1)(vue@3.3.4)
@@ -1583,6 +1586,11 @@ packages:
     engines: {node: '>= 14'}
     dev: true
 
+  /@intlify/shared@9.3.0-beta.18:
+    resolution: {integrity: sha512-Z+XZ1YQL/ZudauayZFNbW2PDf4ac7UBs3PCRsBRb2UcAgat3jN9IZYNDyluQBx4Gmko02kvqc8kC5uJmMlGhmQ==}
+    engines: {node: '>= 16'}
+    dev: true
+
   /@intlify/unplugin-vue-i18n@0.10.0(rollup@2.79.1)(vue-i18n@9.3.0-beta.17):
     resolution: {integrity: sha512-Sf8fe26/d8rBNcg+zBSb7RA1uyhrG9zhIM+CRX6lqcznMDjLRr/1tuVaJ9E6xqJkzjfPgRzNcCqwMt6rpNkL7Q==}
     engines: {node: '>= 14.16'}
@@ -2032,7 +2040,7 @@ packages:
     resolution: {integrity: sha512-Z2UmPkBy5WjxvHKuUcl1X6vKWnIyWSP+9UGde1F+MzzZxYgAQybFud1uL2B3KCowxZdoqT1hd2WklV7EtyCwrQ==}
     hasBin: true
     dependencies:
-      '@nuxt/kit': 3.4.3(rollup@2.79.1)
+      '@nuxt/kit': 3.5.0(rollup@2.79.1)
       chalk: 5.2.0
       ci-info: 3.8.0
       consola: 3.1.0
@@ -2167,6 +2175,17 @@ packages:
       - rollup
       - supports-color
     dev: false
+
+  /@nuxtjs/google-fonts@3.0.1(rollup@2.79.1):
+    resolution: {integrity: sha512-9W5jZhpJ4UTmiPebljdoxs+ju89rOBVD5gb0sPRe73BVXCUUv46lV2Q0ynPZPsnono5WlTB6nyZbOCECa7IWDQ==}
+    dependencies:
+      '@nuxt/kit': 3.5.0(rollup@2.79.1)
+      google-fonts-helper: 3.3.0
+      pathe: 1.1.0
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+    dev: true
 
   /@nuxtjs/i18n@8.0.0-beta.11(rollup@2.79.1)(vue@3.3.4):
     resolution: {integrity: sha512-002P0yR7uJbcMrnz8YG+ELMFWP5IgdrF6es8LOIEgteF+YjBXLWrEEAW+2hlBtB87RdO4mQPtxJFhdtYJ0yMZQ==}
@@ -4883,6 +4902,15 @@ packages:
       ignore: 5.2.4
       merge2: 1.4.1
       slash: 4.0.0
+
+  /google-fonts-helper@3.3.0:
+    resolution: {integrity: sha512-aFEVbmaavTY6wN3m6jZaWXQHfakMy6XNqdWN8YzHqHWCGpGma91zp8MiWsyb5i8gXQXYeGUWegb9ca/Jf/Q7Yw==}
+    dependencies:
+      deepmerge: 4.3.1
+      hookable: 5.5.3
+      ofetch: 1.0.1
+      ufo: 1.1.2
+    dev: true
 
   /gopd@1.0.1:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
@@ -8832,7 +8860,7 @@ packages:
       vue-router:
         optional: true
     dependencies:
-      '@intlify/shared': 9.3.0-beta.17
+      '@intlify/shared': 9.3.0-beta.18
       '@intlify/vue-i18n-bridge': 0.8.0(vue-i18n@9.3.0-beta.17)
       '@intlify/vue-router-bridge': 0.8.0(vue@3.3.4)
       ufo: 1.1.2

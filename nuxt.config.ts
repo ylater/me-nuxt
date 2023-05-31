@@ -25,10 +25,22 @@ export default defineNuxtConfig({
     '@pinia-plugin-persistedstate/nuxt',
     // '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
+    '@nuxtjs/google-fonts',
     // '@nuxtjs/i18n',
-  ],
+  ], 
   devtools: {
     enabled: true,
+  },
+  googleFonts: {
+    families: {
+      'Nunito': true,
+      Roboto: true,
+      Lato: [100, 300],
+      Raleway: {
+        wght: [100, 400],
+        ital: [100]
+      },
+    }
   },
   plugins: [
     { src: '~/plugins/vercel.ts', mode: 'client' },

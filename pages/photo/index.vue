@@ -11,7 +11,6 @@
       @search="onPressEnter"
       @reset="resetSearch"
     >
-      123121
     </me-search-bar>
     <!-- photos -->
     <div class="photos">

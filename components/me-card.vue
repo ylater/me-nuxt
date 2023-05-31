@@ -1,8 +1,12 @@
 <template>
-  <div class="me-card border-gradient" ref="card" :style="{
-    '--x': `${elementX}px`,
-    '--y': `${elementY}px`,
-  }">
+  <div
+    class="me-card border-gradient"
+    ref="card"
+    :style="{
+      '--x': `${elementX}px`,
+      '--y': `${elementY}px`,
+    }"
+  >
     <div class="card-bg"></div>
     <div class="card-content">
       <slot></slot>
@@ -16,17 +20,17 @@ const { elementX, elementY } = useMouseInElement(card);
 const props = defineProps({
   cover: {
     type: String,
-    default: '',
+    default: "",
   },
   title: {
     type: String,
-    default: '',
+    default: "",
   },
   description: {
     type: String,
-    default: '',
+    default: "",
   },
-})
+});
 </script>
 <style lang="less" scoped>
 .me-card {
@@ -36,8 +40,7 @@ const props = defineProps({
   flex-direction: column;
   position: relative;
   width: 100%;
-  background-color: #202023;
-  border-radius: var(--card-br); 
+  border-radius: var(--card-br);
 
   .card-content {
     width: 100%;
@@ -58,11 +61,13 @@ const props = defineProps({
     border-radius: var(--card-br);
     position: absolute;
     inset: -1px;
-    content: '';
-    background: radial-gradient(300px circle at var(--x) var(--y),
-        #1cd1c6 0,
-        #407cff 50%,
-        transparent 100%);
+    content: "";
+    background: radial-gradient(
+      300px circle at var(--x) var(--y),
+      #1cd1c6 0,
+      #407cff 50%,
+      transparent 100%
+    );
   }
 
   .card-bg {
@@ -73,10 +78,11 @@ const props = defineProps({
     width: 100%;
     height: 100%;
     inset: 0;
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    transition-property: color, background-color, border-color,
+      text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
-    background-color: #202023;
+    background-color: var(--me-bg-color);
   }
 }
 </style>

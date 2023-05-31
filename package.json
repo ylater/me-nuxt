@@ -9,7 +9,8 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "^0.4.6",
-    "@nuxt/image": "^0.7.1", 
+    "@nuxt/image": "^0.7.1",
+    "@nuxtjs/google-fonts": "^3.0.1",
     "@nuxtjs/i18n": "8.0.0-beta.11",
     "@pinia-plugin-persistedstate/nuxt": "^1.0.0",
     "consola": "^3.1.0",
