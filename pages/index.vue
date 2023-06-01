@@ -3,7 +3,7 @@
     <!-- <me-particles></me-particles> -->
     <div class="intro">
       <me-card class="card" style="flex: 1">
-        <h1 class="welcome">嘿，来了！</h1>
+        <h1 class="welcome">Y？LATER</h1>
         <h2 class="hello">
           我，Murphy , 凡事只要有可能出错，那就一定会出错的<span
             >「莫非」
@@ -66,7 +66,7 @@
             <img class="bg" src="@/assets/bwf.jpg" />
           </div>
         </me-card>
-        <me-card>
+        <me-card @click="goTo('/ai')">
           <div class="card">
             <h3>AI</h3>
             <img
@@ -227,7 +227,7 @@ function goTo(path: string) {
 .section {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 15px;
   place-content: center;
   grid-template-rows: 50% 50%;
