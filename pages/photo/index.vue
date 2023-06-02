@@ -11,7 +11,6 @@
       @search="onPressEnter"
       @reset="resetSearch"
     >
-      123121
     </me-search-bar>
     <!-- photos -->
     <div class="photos">
@@ -26,11 +25,11 @@
         <div class="empty-text">No results found</div>
       </div>
     </div>
-    <Topics class="topics" v-if="!searching"></Topics>
+    <!-- <Topics class="topics" v-if="!searching"></Topics> -->
   </div>
 </template>
 <script lang="ts" setup>
-import Topics from "./topics.vue";
+// import Topics from "./topics.vue";
 definePageMeta({
   key: "photo",
   title: "Photo",
