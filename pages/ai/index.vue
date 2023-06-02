@@ -4,18 +4,22 @@
       <div class="ai-aside">
         <ul class="nav">
           <li
-            v-for="nav in navList"
-            :key="nav.name"
-            :class="{ active: nav.model === model }"
+            v-for="item in modelList"
+            :key="item"
+            :class="{ active: item === aiModel }"
+            @click="hadleModel(item)"
           >
-            {{ nav.name }}
+            {{ item }}
           </li>
         </ul>
       </div>
       <div class="ai-main">
         <!-- <router-view></router-view> -->
+        <div class="ai-loading" v-if="isLoading">
+          <a-spin></a-spin>
+        </div>
         <div class="records">
-          <a-scrollbar>
+          <a-scrollbar style="height: 100%; overflow: auto">
             <div class="chat" v-for="(item, index) in chatRecods" :key="index">
               <div class="caht-q">
                 <div class="caht-q-text">{{ item.inputs }}</div>
@@ -27,10 +31,7 @@
           </a-scrollbar>
         </div>
         <div class="input">
-          <a-input v-model="query" @press-enter="getImg" :loading="isLoading">
-            <template #button-icon>
-              <icon name="ep:search" />
-            </template>
+          <a-input v-model="query" @press-enter="getImg" :disabled="isLoading">
           </a-input>
         </div>
       </div>
@@ -43,28 +44,27 @@ definePageMeta({
   title: "AI",
 });
 type ChatType = "TextToImage" | "ImageToText" | "ImageToTmage";
-const navList = [
-  {
-    name: "TextToImage",
-    model: "prompthero/openjourney",
-  },
-  {
-    name: "GPT2",
-    model: "gpt2",
-  },
-  {
-    name: "ImageToText",
-    model: "stabilityai/stable-diffusion-2-1",
-  },
+const modelList = [
+  "runwayml/stable-diffusion-v1-5",
+  "prompthero/openjourney",
+  "stabilityai/stable-diffusion-2-1",
+  "stabilityai/stable-diffusion-2-base",
+  "wavymulder/Analog-Diffusion",
+  "nitrosocke/Ghibli-Diffusion",
 ];
-const model = ref("prompthero/openjourney");
+
+const aiModel = ref("runwayml/stable-diffusion-v1-5");
+function hadleModel(model: string) {
+  chatRecods.value = [];
+  aiModel.value = model;
+}
 const chatRecods = ref<any>([]);
 const query = ref("");
 const imgUrl = ref("");
 const isLoading = ref(false);
 function getImg() {
   const params = {
-    inputs: query.value + " , mdjrny-v4 style",
+    inputs: query.value,
   };
   isLoading.value = true;
   getImgByQuery(params).then((res) => {
@@ -81,7 +81,7 @@ function getImg() {
 //text to image
 async function getImgByQuery(data: any) {
   const response = await fetch(
-    `https://api-inference.huggingface.co/models/${model.value}`,
+    `https://api-inference.huggingface.co/models/${aiModel.value}`,
     {
       headers: {
         Authorization: "Bearer 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",
@@ -90,8 +90,6 @@ async function getImgByQuery(data: any) {
       body: JSON.stringify(data),
     }
   );
-  // return console.log(JSON.stringify(response));
-
   const result = await response.blob();
   return result;
 }
@@ -101,13 +99,27 @@ async function getImgByQuery(data: any) {
   width: 100%;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
+  overflow: hidden;
   .ai-main {
+    position: relative;
     display: flex;
     flex: 1;
     width: 100%;
+    height: 100%;
     max-width: 1200px;
     margin: 0 auto;
+    .ai-loading {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     .ai-aside {
       width: 200px;
       .nav {
@@ -137,7 +149,7 @@ async function getImgByQuery(data: any) {
       display: flex;
       flex-direction: column;
       padding: 20px;
-      background-color: #222327;
+      background-color: #21222d;
       border-radius: 28px;
       padding: 30px;
       .records {

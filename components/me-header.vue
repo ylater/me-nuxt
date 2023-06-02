@@ -47,12 +47,12 @@ const navList = [
     path: "/photo",
   },
   {
-    name: "Badminton",
-    path: "/badminton",
+    name: "AI",
+    path: "/ai",
   },
   {
-    name: "About",
-    path: "/about",
+    name: "Badminton",
+    path: "/badminton",
   },
 ];
 const activeNav = computed(() => {

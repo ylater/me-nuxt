@@ -2,10 +2,10 @@
   <NuxtLayout>
     <NuxtLoadingIndicator />
     <NuxtPage :keepalive="{ exclude: ['preview'] }" />
+    <!-- <me-cursor></me-cursor> -->
   </NuxtLayout>
 </template>
-<script lang="ts" setup>
-</script>
+<script lang="ts" setup></script>
 <style lang="less">
 html,
 body,
@@ -40,8 +40,6 @@ html.dark {
 }
 
 body {
-
-
   input,
   h1,
   h3,

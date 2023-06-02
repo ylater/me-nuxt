@@ -38,8 +38,8 @@
       </div>
     </div>
     <p class="search-tips">
-      {{ tips }} Or visit
-      <NuxtLink class="link" to="/photo/collections">Collections</NuxtLink>
+      {{ tips }}
+      <!-- Or visit<NuxtLink class="link" to="/photo/collections">Collections</NuxtLink> -->
     </p>
   </div>
 </template>

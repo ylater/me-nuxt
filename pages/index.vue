@@ -45,6 +45,12 @@
     </div>
     <div class="works">
       <div class="section">
+        <me-card @click="goTo('/cover')">
+          <div class="card">
+            <h3>Video Cover</h3>
+            <me-cover class="bg" style="width: 100%; height: 100%"></me-cover>
+          </div>
+        </me-card>
         <me-card @click="goTo('/photo')">
           <div class="card">
             <h3>Image Search</h3>
@@ -54,18 +60,16 @@
             />
           </div>
         </me-card>
-        <me-card @click="goTo('/cover')" style="grid-column: span 2">
+        <me-card>
           <div class="card">
-            <h3>Video Cover</h3>
-            <me-cover class="bg" style="width: 100%; height: 100%"></me-cover>
+            <h3>dashboard</h3>
+            <img
+              class="bg"
+              src="https://images.unsplash.com/photo-1614332287897-cdc485fa562d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTUzNTJ8MHwxfHNlYXJjaHwyfHxzb29ufHpoLUhhbnN8MHx8fHwxNjg1NTI1NDcwfDA&ixlib=rb-4.0.3&q=80&w=1080"
+            />
           </div>
         </me-card>
-        <me-card style="grid-column: span 1">
-          <div class="card">
-            <h3>BWF</h3>
-            <img class="bg" src="@/assets/bwf.jpg" />
-          </div>
-        </me-card>
+
         <me-card @click="goTo('/ai')">
           <div class="card">
             <h3>AI</h3>
@@ -77,20 +81,8 @@
         </me-card>
         <me-card>
           <div class="card">
-            <!-- <h3>AI</h3> -->
-            <img
-              class="bg"
-              src="https://images.unsplash.com/photo-1614332287897-cdc485fa562d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTUzNTJ8MHwxfHNlYXJjaHwyfHxzb29ufHpoLUhhbnN8MHx8fHwxNjg1NTI1NDcwfDA&ixlib=rb-4.0.3&q=80&w=1080"
-            />
-          </div>
-        </me-card>
-        <me-card>
-          <div class="card">
-            <!-- <h3>AI</h3> -->
-            <img
-              class="bg"
-              src="https://images.unsplash.com/photo-1614332287897-cdc485fa562d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTUzNTJ8MHwxfHNlYXJjaHwyfHxzb29ufHpoLUhhbnN8MHx8fHwxNjg1NTI1NDcwfDA&ixlib=rb-4.0.3&q=80&w=1080"
-            />
+            <h3>BWF</h3>
+            <img class="bg" src="@/assets/bwf.jpg" />
           </div>
         </me-card>
       </div>
@@ -198,8 +190,8 @@ function goTo(path: string) {
       }
     }
     .work-title {
-      padding: 0 12px;
-      font-size: 13px;
+      padding: 12px;
+      font-size: 16px;
       font-weight: 900;
       text-transform: uppercase;
       span {
@@ -208,10 +200,11 @@ function goTo(path: string) {
     }
     .desc {
       padding: 0 12px;
-      font-size: 13px;
+      font-size: 16px;
       font-weight: 400;
       margin: 12px auto;
       text-transform: uppercase;
+      opacity: 0.6;
       span {
         color: var(--color-3);
       }
@@ -219,21 +212,45 @@ function goTo(path: string) {
   }
   .works {
     width: calc(100% - 480px);
+    height: 100%;
     display: flex;
     flex-direction: column;
   }
 }
 
 .section {
+  flex: 1;
   width: 100%;
+  // margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
   gap: 15px;
   place-content: center;
-  grid-template-rows: 50% 50%;
-  height: 100vh;
-  min-height: 460px;
   padding: 30px 0;
+  .me-card {
+    &:nth-child(1) {
+      grid-column: 1 / 7;
+      grid-row: 1;
+    }
+    &:nth-child(2) {
+      grid-column: 7 / 10;
+      grid-row: 1;
+    }
+    &:nth-child(3) {
+      grid-column: 1 / 4;
+      grid-row: 2;
+    }
+    &:nth-child(4) {
+      grid-column: 4 / 10;
+      grid-row: 2 / 3;
+    }
+    &:nth-child(5) {
+      grid-column: 10 / 13;
+      grid-row: 1 / 3;
+      height: 90vh;
+    }
+  }
 
   .card {
     position: relative;
