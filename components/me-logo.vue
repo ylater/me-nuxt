@@ -59,7 +59,7 @@
     margin-right: 4px;
   }
   .logo-text {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
     color: #fff;
     letter-spacing: 2px;

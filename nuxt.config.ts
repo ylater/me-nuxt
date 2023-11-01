@@ -26,7 +26,7 @@ export default defineNuxtConfig({
     // '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
     '@nuxtjs/google-fonts',
-    // '@nuxtjs/i18n',
+    '@nuxtjs/i18n',
   ], 
   devtools: {
     enabled: true,
@@ -46,7 +46,7 @@ export default defineNuxtConfig({
     { src: '~/plugins/vercel.ts', mode: 'client' },
     {
       src: '~/plugins/arco.ts',
-    }
+    } 
   ],
   pinia: {
     autoImports: ['defineStore', 'acceptHMRUpdate'],
@@ -57,9 +57,9 @@ export default defineNuxtConfig({
   css: [
     '@/assets/style/style.less',
   ],
-  // i18n: {
-  //   vueI18n: './locale/index.ts',
-  // },
+  i18n: {
+    vueI18n:'./locale/index.ts',
+  },
   pwa: {
     manifest: {
       name: 'Me Cover',
