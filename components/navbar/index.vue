@@ -2,14 +2,14 @@
   <div class="navbar">
     <div class="left-side">
       <a-space>
-        <img alt="logo" style="width:45px" src="@/assets/logo.svg" />
+        <img alt="logo" style="width: 45px" src="@/assets/logo.svg" />
         <a-typography-title :style="{ margin: 0, fontSize: '18px' }" :heading="5">
           YLater
         </a-typography-title>
       </a-space>
     </div>
     <div class="center-side">
-      <Menu v-if="topMenu" />
+      <!-- <Menu v-if="topMenu" /> -->
     </div>
     <ul class="right-side">
       <li>
@@ -68,7 +68,7 @@
           content-class="message-popover">
           <div ref="refBtn" class="ref-btn"></div>
           <template #content>
-            <message-box />
+            <!-- <message-box /> -->
           </template>
         </a-popover>
       </li>
@@ -95,68 +95,50 @@
         </a-tooltip>
       </li>
       <li>
-        <a-dropdown trigger="click">
-          <a-avatar :size="32" :style="{ marginRight: '8px', cursor: 'pointer' }">
-            <img alt="avatar" :src="avatar" />
-          </a-avatar>
-          <template #content>
-            <a-doption>
-              <a-space @click="switchRoles">
-                <icon-tag />
-                <span>
-                  {{ $t('messageBox.switchRoles') }}
-                </span>
-              </a-space>
-            </a-doption>
-            <a-doption>
-              <a-space @click="$router.push({ name: 'Info' })">
-                <icon-user />
-                <span>
-                  {{ $t('messageBox.userCenter') }}
-                </span>
-              </a-space>
-            </a-doption>
-            <a-doption>
-              <a-space @click="$router.push({ name: 'Setting' })">
-                <icon-settings />
-                <span>
-                  {{ $t('messageBox.userSettings') }}
-                </span>
-              </a-space>
-            </a-doption>
-            <a-doption>
-              <a-space @click="handleLogout">
-                <icon-export />
-                <span>
-                  {{ $t('messageBox.logout') }}
-                </span>
-              </a-space>
-            </a-doption>
-          </template>
-        </a-dropdown>
+        <a-avatar :size="32" :style="{ marginRight: '8px', cursor: 'pointer' }">
+          <img alt="avatar" src="@/assets/avatar.png" />
+        </a-avatar>
       </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Message } from '@arco-design/web-vue';
-import { useDark, useToggle, useFullscreen } from '@vueuse/core';
-import { LOCALE_OPTIONS } from '@/locale';
+import { Message } from "@arco-design/web-vue";
+import { useDark, useToggle, useFullscreen } from "@vueuse/core";
 const { locale } = useI18n();
 const topMenu = ref(false);
 //多语言
-const locales = [...LOCALE_OPTIONS];
+const locales = [
+  { label: "中文", value: "zh-CN" },
+  { label: "English", value: "en-US" },
+];
 const currentLocale = ref(locale.value);
 const changeLocale = () => {
   locale.value = currentLocale.value;
-  localStorage.setItem('locale', currentLocale.value);
+  localStorage.setItem("locale", currentLocale.value);
   Message.success({
-    content: $t('settings.language.success'),
+    content: $t("settings.language.success"),
   });
+};
+const setDropDownVisible = () => { };
+//theme
+const theme = ref("light");
+function handleToggleTheme() {
+  theme.value = theme.value === "light" ? "dark" : "light";
+  localStorage.setItem("theme", theme.value);
+  document.body.setAttribute("data-theme", theme.value);
 }
-const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void;
-const handleLogout = () => { }
+//全屏
+const { isFullscreen, toggleFullScreen } = useFullscreen();
+
+//设置
+const setVisible = useToggle(false);
+function setPopoverVisible() {
+  topMenu.value = !topMenu.value;
+}
+//logout
+const handleLogout = () => { };
 </script>
 
 <style scoped lang="less">
